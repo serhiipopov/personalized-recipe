@@ -1,18 +1,13 @@
-import {StyleSheet, View} from 'react-native';
+import { FC } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import Tabs from './src/components/Tabs/Tabs';
 
-const App = () => {
+const App: FC = () => {
   return (
-    <View style={styles.container}>
-    </View>
-  );
+    <NavigationContainer>
+      <Tabs />
+    </NavigationContainer>
+  )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 19,
-    paddingTop: 80,
-  },
-});
 
 export default App;
