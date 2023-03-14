@@ -3,6 +3,7 @@ export const GlobalStyles = {
     cyan100: '#c4f1f9',
     cyan700: '#0987a0',
     cyan800: '#086f83',
+    teal300: '#4fd1c5',
     teal400: '#38b2ac',
     teal500: '#319795',
     teal700: '#285e61',

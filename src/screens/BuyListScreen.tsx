@@ -1,13 +1,26 @@
 import {FC} from 'react';
 import BaseLayout from '../components/BaseLayout/BaseLayout';
-import {Text } from 'react-native';
+import IngredientInput from '../components/Ingredient/IngredientInput';
+import IngredientList from '../components/Ingredient/IngredientList';
+import {StyleSheet, View} from 'react-native';
+import {GlobalStyles} from '../constants/styles';
 
 const BuyListScreen: FC = () => {
   return (
-    <BaseLayout>
-        <Text>BuyListScreen</Text>
-    </BaseLayout>
-  );
-};
+    <View style={styles.container}>
+      <IngredientInput/>
+      <IngredientList/>
+    </View>
+  )
+}
 
 export default BuyListScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    backgroundColor: GlobalStyles.colors.gray50
+  }
+})

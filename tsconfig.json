@@ -9,5 +9,6 @@
   "compilerOptions": {
     "types" : ["node", "lodash", "express"],
     "isolatedModules": false
-  }
+  },
+  "include": ["/**/*.ts", "/**/*.d.ts"]
 }

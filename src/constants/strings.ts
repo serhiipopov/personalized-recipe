@@ -1,3 +1,3 @@
 export enum Strings {
-  whatBuy = 'What buy?'
+  whatBuy = 'What to buy?'
 }

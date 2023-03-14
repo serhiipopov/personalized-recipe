@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import HomeScreen from '../../screens/HomeScreen';
@@ -34,17 +35,17 @@ const BottomTabsOverview = () => {
           }}
         />
         <Tab.Screen
-          name={ScreenEnum.Recipe}
-          component={RecipeScreen}
-          options={{
-            tabBarIcon: ({ color, size }) => <Ionicons name='reader-outline' color={color} size={size} />
-          }}
-        />
-        <Tab.Screen
           name={ScreenEnum.BuyList}
           component={BuyListScreen}
           options={{
             tabBarIcon: ({ color, size }) => <Ionicons name='create-outline' color={color} size={size} />
+          }}
+        />
+        <Tab.Screen
+          name={ScreenEnum.Recipe}
+          component={RecipeScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => <Ionicons name='reader-outline' color={color} size={size} />
           }}
         />
         <Tab.Screen
@@ -61,9 +62,11 @@ const BottomTabsOverview = () => {
 
 const Tabs: FC = () => {
   return (
-    <Stack.Navigator initialRouteName={ScreenEnum.Home}>
-      <Stack.Screen name='BottomTabsOverview' options={{ headerShown: false }} component={BottomTabsOverview} />
-    </Stack.Navigator>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName={ScreenEnum.Home}>
+        <Stack.Screen name='BottomTabsOverview' options={{ headerShown: false }} component={BottomTabsOverview} />
+      </Stack.Navigator>
+    </NavigationContainer>
   )
 }
 
