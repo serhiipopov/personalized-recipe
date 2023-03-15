@@ -1,23 +1,53 @@
 import { FC } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { GlobalStyles } from '../../constants/styles';
+import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
 interface IngredientItemProps {
   ingredient: string;
   onDeleteItem: () => void;
+  onToggleItem: () => void;
+  isCompleted: boolean;
 }
 
-const IngredientItem: FC<IngredientItemProps> = ({ ingredient, onDeleteItem }) => {
+const IngredientItem: FC<IngredientItemProps> = ({
+  ingredient,
+  onDeleteItem,
+  onToggleItem,
+  isCompleted,
+  }) => {
   return (
-    <Pressable
-      onPress={onDeleteItem}
-      android_ripple={{ color: GlobalStyles.colors.cyan100 }}
-      style={({ pressed }) => pressed && styles.pressedItem}
-    >
-      <View style={styles.container}>
-        <Text style={styles.text}>{ingredient}</Text>
+    <View style={styles.container}>
+
+      <View style={styles.checkbox}>
+        <BouncyCheckbox
+          size={30}
+          fillColor={GlobalStyles.colors.teal300}
+          onPress={onToggleItem}
+          isChecked={isCompleted}
+          innerIconStyle={{ borderRadius: 12 }}
+          iconStyle={{ borderRadius: 12 }}
+          bounceEffectIn={0.6}
+          bounceEffectOut={1}
+          style={{
+            shadowColor: GlobalStyles.colors.gray900,
+            shadowOffset: { width: 5, height: 4 },
+            shadowOpacity: 0.2,
+            shadowRadius: 9,
+          }}
+        />
       </View>
-    </Pressable>
+
+      <Pressable
+        onPress={onDeleteItem}
+        android_ripple={{color: GlobalStyles.colors.cyan100}}
+        style={({pressed}) => pressed && styles.pressedItem}
+      >
+        <View style={styles.wrapperText}>
+          <Text style={styles.text}>{ingredient}</Text>
+        </View>
+      </Pressable>
+    </View>
   )
 }
 
@@ -25,18 +55,28 @@ export default IngredientItem;
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 12,
-    backgroundColor: GlobalStyles.colors.cyan700,
+  },
+  wrapperText: {
     marginBottom: 8,
+    minWidth: '70%',
   },
   text: {
-    fontSize: 18,
-    padding: 8,
-    color: GlobalStyles.colors.gray50,
-    textTransform: 'uppercase'
+    fontSize: 16,
+    letterSpacing: 0.5,
+    padding: 10,
+    color: GlobalStyles.colors.teal700,
+    textTransform: 'uppercase',
+    shadowColor: GlobalStyles.colors.gray900,
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
   },
   pressedItem: {
     opacity: 0.6,
+  },
+  checkbox: {
+    paddingLeft: 6
   }
 })

@@ -17,12 +17,18 @@ export const ingredientsSlice = createSlice({
     removeIngredient(state, action: PayloadAction<string>) {
       state.ingredients = state.ingredients.filter(ingredient => ingredient.id !== action.payload)
     },
-  },
-})
+    toggleIngredient(state, action: PayloadAction<string>) {
+      const doneIngredient = state.ingredients.find(ingredient => ingredient.id === action.payload)
+      if (doneIngredient) {
+          doneIngredient.completed = !doneIngredient.completed
+    }
+  }
+}})
 
 export const {
   addIngredient,
   removeIngredient,
+  toggleIngredient
 } = ingredientsSlice.actions;
 
 export default ingredientsSlice.reducer;

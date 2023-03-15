@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { removeIngredient } from '../../store/ingredients/slice';
+import { removeIngredient, toggleIngredient } from '../../store/ingredients/slice';
 import IngredientItem from './IngredientItem';
 import Spinner from '../UI/Spinner';
 
@@ -13,7 +13,11 @@ const IngredientList: FC = () => {
     dispatch(removeIngredient(id))
   }
 
-  if (isLoading) return <Spinner/>
+  const toggleProductHandler = (id: string) => {
+    dispatch(toggleIngredient(id))
+  }
+
+  if (isLoading) return <Spinner />
   if (error) return <Text>Error</Text>
 
   return (
@@ -24,10 +28,12 @@ const IngredientList: FC = () => {
           <IngredientItem
             ingredient={item.ingredient}
             onDeleteItem={() => deleteIngredientHandler(item.id)}
+            onToggleItem={() => toggleProductHandler(item.id)}
+            isCompleted={item.completed}
           />
         }
         keyExtractor={item => item.id}
-        alwaysBounceVertical={false}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   )
@@ -39,5 +45,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 24,
+    alignItems: 'center',
   }
 })

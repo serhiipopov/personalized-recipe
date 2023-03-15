@@ -1,11 +1,20 @@
 import { FC } from 'react';
-import { ActivityIndicator } from 'react-native';
+import { StyleSheet, ActivityIndicator, View } from 'react-native';
 import { GlobalStyles } from '../../constants/styles';
 
 const Spinner: FC = () => {
   return (
-    <ActivityIndicator size='large' color={GlobalStyles.colors.teal400} />
+    <View style={styles.wrapper}>
+      <ActivityIndicator size='large' color={GlobalStyles.colors.teal700} />
+    </View>
   )
 }
 
 export default Spinner;
+
+const styles = StyleSheet.create({
+  wrapper: {
+    marginTop: 20,
+    alignItems: 'center'
+  }
+})

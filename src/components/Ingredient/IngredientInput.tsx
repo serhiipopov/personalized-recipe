@@ -15,12 +15,15 @@ const IngredientInput: FC = () => {
   const addProductHandler = () => {
     const newIngredient = {
       ingredient: input,
-      id: Date.now().toString()
+      id: Date.now().toString(),
+      completed: false,
     }
 
     dispatch(addIngredient(newIngredient));
     setInput('');
   }
+
+  const countInput = input.length;
 
   return (
     <View style={styles.container}>
@@ -29,12 +32,13 @@ const IngredientInput: FC = () => {
         value={input}
         onChangeText={productInputHandler}
         placeholder='Add product'
-        maxLength={20}
+        maxLength={25}
       />
       <Button
         title='Add'
         color={GlobalStyles.colors.teal700}
         onPress={addProductHandler}
+        disabled={!countInput}
       />
     </View>
   )
