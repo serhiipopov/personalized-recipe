@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { Text } from 'react-native';
 import BaseLayout from '../components/BaseLayout/BaseLayout';
 import HomeContainer from '../components/HomeContainer/HomeContainer';
 

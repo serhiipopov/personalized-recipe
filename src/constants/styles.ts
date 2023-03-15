@@ -10,7 +10,10 @@ export const GlobalStyles = {
     teal900: '#1d4044',
     error500: '#e53e3e',
     gray50: '#f7fafc',
+    gray100: '#edf2f7',
+    gray200: '#e2e8f0',
     gray300: '#cbd5e0',
-    gray900: '#171923'
+    gray900: '#171923',
+    orange200: '#FEEBC8'
   }
 }

@@ -1,20 +1,43 @@
 import { FC } from 'react';
 import { StyleSheet, View, Text, Pressable } from 'react-native';
-import { Strings } from '../../constants/strings';
+import { useLinkTo } from '@react-navigation/native';
 
+import { Strings } from '../../constants/strings';
+import { GlobalStyles } from '../../constants/styles';
+import { Screen } from '../../constants/screen';
 
 const HomeContainer: FC = () => {
+  const linkTo = useLinkTo();
+
+  const onLintToByuList = () => linkTo(`/${Screen.BuyList}`);
+
   return (
     <View style={styles.container}>
-      <View  style={styles.wrapperPress}>
-        <Pressable hitSlop={8}>
+      <View style={styles.wrapperPress}>
+        <Pressable
+          style={({ pressed }) => [
+            {
+              backgroundColor: pressed
+                ? GlobalStyles.colors.gray300
+                : GlobalStyles.colors.gray200,
+            },
+            styles.wrapperCustom,
+          ]}
+          onPress={onLintToByuList}
+        >
         <Text style={styles.textPress}>{Strings.whatBuy}</Text>
         </Pressable>
       </View>
-     <View  style={styles.wrapperPress}>
+     <View style={styles.wrapperPress}>
        <Pressable
-         onPress={() => {
-         }}
+         style={({pressed}) => [
+           {
+             backgroundColor: pressed
+               ? GlobalStyles.colors.gray300
+               : GlobalStyles.colors.gray200,
+           },
+           styles.wrapperCustom,
+         ]}
        >
        <Text style={styles.textPress}>2</Text>
        </Pressable>
@@ -38,15 +61,15 @@ const styles = StyleSheet.create({
   },
   wrapperPress: {
     flex: 2,
-    borderWidth: 1,
-    borderColor: '#cccccc',
-    borderRadius: 8,
-    padding: 8,
-    height: 130,
-    justifyContent: 'center'
   },
   textPress: {
     textAlign: 'center'
-  }
+  },
+  wrapperCustom: {
+    borderRadius: 8,
+    padding: 8,
+    height: 130,
+    justifyContent: 'center',
+  },
 })
 

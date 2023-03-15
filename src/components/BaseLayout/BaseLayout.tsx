@@ -1,5 +1,6 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { GlobalStyles } from '../../constants/styles';
 
 interface BaseLayoutProps {
   children: React.ReactNode;
@@ -18,6 +19,7 @@ export default BaseLayout;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: GlobalStyles.colors.gray50,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     paddingHorizontal: 16,

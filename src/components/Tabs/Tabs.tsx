@@ -35,13 +35,6 @@ const BottomTabsOverview = () => {
           }}
         />
         <Tab.Screen
-          name={ScreenEnum.BuyList}
-          component={BuyListScreen}
-          options={{
-            tabBarIcon: ({ color, size }) => <Ionicons name='create-outline' color={color} size={size} />
-          }}
-        />
-        <Tab.Screen
           name={ScreenEnum.Recipe}
           component={RecipeScreen}
           options={{
@@ -65,6 +58,7 @@ const Tabs: FC = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName={ScreenEnum.Home}>
         <Stack.Screen name='BottomTabsOverview' options={{ headerShown: false }} component={BottomTabsOverview} />
+        <Stack.Screen name={ScreenEnum.BuyList} component={BuyListScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   )
