@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
     backgroundColor: GlobalStyles.colors.gray50,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingHorizontal: 22,
   }
 })

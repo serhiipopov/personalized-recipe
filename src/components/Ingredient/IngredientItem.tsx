@@ -29,12 +29,6 @@ const IngredientItem: FC<IngredientItemProps> = ({
           iconStyle={{ borderRadius: 12 }}
           bounceEffectIn={0.6}
           bounceEffectOut={1}
-          style={{
-            shadowColor: GlobalStyles.colors.gray900,
-            shadowOffset: { width: 5, height: 4 },
-            shadowOpacity: 0.2,
-            shadowRadius: 9,
-          }}
         />
       </View>
 
@@ -59,7 +53,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   wrapperText: {
-    marginBottom: 8,
     minWidth: '70%',
   },
   text: {
@@ -68,13 +61,9 @@ const styles = StyleSheet.create({
     padding: 10,
     color: GlobalStyles.colors.teal700,
     textTransform: 'uppercase',
-    shadowColor: GlobalStyles.colors.gray900,
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
   },
   pressedItem: {
-    opacity: 0.6,
+    opacity: 0.3,
   },
   checkbox: {
     paddingLeft: 6

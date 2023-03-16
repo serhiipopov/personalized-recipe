@@ -1,21 +1,16 @@
 import { FC } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { removeIngredient, toggleIngredient } from '../../store/ingredients/slice';
+import { useAppSelector } from '../../hooks/redux';
 import IngredientItem from './IngredientItem';
 import Spinner from '../UI/Spinner';
 
-const IngredientList: FC = () => {
+interface IngredientListProps {
+  onDeleteItem: (id: string) => void;
+  onToggleItem: (id: string) => void;
+}
+
+const IngredientList: FC<IngredientListProps> = ({ onDeleteItem, onToggleItem }) => {
   const { ingredients, isLoading, error } = useAppSelector(state => state.ingredientsReducer);
-  const dispatch = useAppDispatch();
-
-  const deleteIngredientHandler = (id: string) => {
-    dispatch(removeIngredient(id))
-  }
-
-  const toggleProductHandler = (id: string) => {
-    dispatch(toggleIngredient(id))
-  }
 
   if (isLoading) return <Spinner />
   if (error) return <Text>Error</Text>
@@ -27,8 +22,8 @@ const IngredientList: FC = () => {
         renderItem={({ item }) =>
           <IngredientItem
             ingredient={item.ingredient}
-            onDeleteItem={() => deleteIngredientHandler(item.id)}
-            onToggleItem={() => toggleProductHandler(item.id)}
+            onDeleteItem={() => onDeleteItem(item.id)}
+            onToggleItem={() => onToggleItem(item.id)}
             isCompleted={item.completed}
           />
         }
