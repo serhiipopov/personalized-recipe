@@ -6,7 +6,7 @@ interface IconButtonProps {
   name: string;
   size: number;
   color: string;
-  onPress: () => void;
+  onPress?: () => void;
   disabled?: boolean;
 }
 

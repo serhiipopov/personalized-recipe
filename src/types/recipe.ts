@@ -1,8 +1,6 @@
 export interface IRecipe {
   calories: string
-  title: string;
   source: string;
-  uri: string;
   label: string;
   image: string;
   url: string;
