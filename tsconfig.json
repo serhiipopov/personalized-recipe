@@ -10,5 +10,6 @@
     "types" : ["node", "lodash", "express"],
     "isolatedModules": false
   },
+  "typeRoots": ["./node_modules/@types","./@types" ],
   "include": ["/**/*.ts", "/**/*.d.ts"]
 }

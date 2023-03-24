@@ -1,14 +1,15 @@
 export interface IRecipe {
   calories: string
-  source: string;
   label: string;
   image: string;
   url: string;
+  uri: string;
   dietLabels: string[];
   healthLabels: string[];
   ingredientLines: string[];
-  ingredients: Ingredient;
+  ingredients: Ingredient[];
   cuisineType: string[];
+
 }
 
 export interface Recipe {

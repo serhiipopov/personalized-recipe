@@ -9,12 +9,14 @@ import HomeScreen from '../../screens/HomeScreen';
 import RecipeScreen from '../../screens/RecipeScreen';
 import BuyListScreen from '../../screens/BuyListScreen';
 import SettingsScreen from '../../screens/SettingsScreen';
+import RecipeDetailScreen from '../../screens/RecipeDetailScreen';
 
+import { RootStackParamList } from '../../types/route';
 import { Screen as ScreenEnum } from '../../constants/screen';
 import { GlobalStyles } from '../../constants/styles';
 
 const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const BottomTabsOverview = () => {
   return (
@@ -62,7 +64,7 @@ const Tabs: FC = () => {
       <NavigationContainer>
         <Stack.Navigator initialRouteName={ScreenEnum.Home}>
           <Stack.Screen
-            name='BottomTabsOverview'
+            name={ScreenEnum.BottomTabsOverview}
             options={{ headerShown: false }}
             component={BottomTabsOverview}
           />
@@ -74,6 +76,15 @@ const Tabs: FC = () => {
             }}
             name={ScreenEnum.BuyList}
             component={BuyListScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerStyle: { backgroundColor: GlobalStyles.colors.teal400},
+              headerTintColor: GlobalStyles.colors.gray50,
+              presentation: 'modal'
+            }}
+            name={ScreenEnum.RecipeDetails}
+            component={RecipeDetailScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>

@@ -1,42 +1,34 @@
 import { FC, memo } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Pressable
+} from 'react-native';
 import { Recipe } from '../../types/recipe';
-import { Linking } from 'react-native';
 import { GlobalStyles } from '../../constants/styles';
 
 interface RecipeProps {
-  recipe: Recipe
+  recipe: Recipe;
+  onPress: () => void;
 }
 
-const RecipeItem: FC<RecipeProps> = ({recipe}) => {
-  const {
-    source,
-    cuisineType,
-    dietLabels,
-    healthLabels,
-    label,
-    image,
-    ingredientLines,
-    ingredients,
-    url,
-    calories
-  } = recipe.recipe;
-  const numCalories = Number(calories).toFixed(2);
+const RecipeItem: FC<RecipeProps> = ({ recipe, onPress }) => {
+  const { label, image, calories } = recipe.recipe;
+
+  const numCalories = Number(calories).toFixed(1);
   const caloriesText = `Calories ${numCalories}`;
 
   return (
     <View style={styles.item}>
-      <View>
-        <Image source={{uri: image}} style={styles.image}/>
-      </View>
-      <Text style={styles.title}>{label}</Text>
-      {/*<Text*/}
-      {/*  style={{color: GlobalStyles.colors.cyan700}}*/}
-      {/*  onPress={() => Linking.openURL(url)}*/}
-      {/*>*/}
-      {/*  {url}*/}
-      {/*</Text>*/}
-      <Text style={styles.calories}>{caloriesText}</Text>
+      <Pressable onPress={onPress}>
+        <View>
+          <Image source={{ uri: image }} style={styles.image} />
+        </View>
+        <Text style={styles.title}>{label}</Text>
+        <Text style={styles.calories}>{caloriesText}</Text>
+      </Pressable>
     </View>
   )
 }

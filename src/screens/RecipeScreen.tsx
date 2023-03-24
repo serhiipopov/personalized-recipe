@@ -8,8 +8,13 @@ import BaseLayout from '../components/BaseLayout/BaseLayout';
 import RecipesList from '../components/Recipes/RecipesList';
 import SearchRecipe from '../components/Recipes/SearchRecipe';
 import Spinner from '../components/UI/Spinner';
+import { StackNavigation } from '../types/route';
 
-const RecipeScreen: FC = () => {
+interface RecipeScreenProps {
+  navigation: StackNavigation;
+}
+
+const RecipeScreen: FC<RecipeScreenProps> = ({ navigation }) => {
   const [searchRecipe, setSearchRecipe] = useState<string>('');
   const { recipes, error, isLoading } = useAppSelector(state => state.recipesReducer);
   const dispatch = useAppDispatch();
@@ -27,13 +32,14 @@ const RecipeScreen: FC = () => {
   if (isLoading) return <Spinner />
   if (error) return <Text>Error</Text>
 
+
   return (
     <BaseLayout>
       <SearchRecipe
         recipe={searchRecipe}
         onChange={onSearchRecipeHandler}
       />
-      <RecipesList recipes={recipes} />
+      <RecipesList recipes={recipes} navigation={navigation} />
     </BaseLayout>
   )
 }
