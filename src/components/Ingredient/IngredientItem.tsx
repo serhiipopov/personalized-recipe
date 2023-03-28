@@ -35,7 +35,7 @@ const IngredientItem: FC<IngredientItemProps> = ({
       <Pressable
         onPress={onDeleteItem}
         android_ripple={{color: GlobalStyles.colors.cyan100}}
-        style={({pressed}) => pressed && styles.pressedItem}
+        style={({ pressed }) => pressed && styles.pressedItem}
       >
         <View style={styles.wrapperText}>
           <Text style={styles.text}>{ingredient}</Text>

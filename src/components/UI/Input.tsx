@@ -1,18 +1,29 @@
-import {FC, ReactChildren} from 'react';
-import { View, Text, TextInput, StyleProp, StyleSheet } from 'react-native';
-import {GlobalStyles} from '../../constants/styles';
+import { FC } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleProp,
+  StyleSheet,
+} from 'react-native';
 
 interface InputProps {
-  label: string;
-  textInputConfig?: StyleProp<any>;
-  children?: React.ReactNode
+  label?: string;
+  textInputConfig?: any;
+  style?: StyleProp<any>;
 }
 
-const Input: FC<InputProps> = ({ label, textInputConfig, children }) => {
+const Input: FC<InputProps> = ({
+  label,
+  style,
+  textInputConfig,
+  }) => {
+  const inputStyles = [styles.input];
+
   return (
-    <View>
-      <Text>{label}</Text>
-      <TextInput  style={styles.input} {...textInputConfig} />
+    <View style={[styles.inputContainer, style]}>
+      { label && <Text>{label}</Text> }
+      <TextInput style={inputStyles} {...textInputConfig} />
     </View>
   )
 }
@@ -20,10 +31,13 @@ const Input: FC<InputProps> = ({ label, textInputConfig, children }) => {
 export default Input;
 
 const styles = StyleSheet.create({
+  inputContainer: {
+    flex: 1,
+    marginHorizontal: 4,
+    marginVertical: 8,
+  },
   input: {
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: GlobalStyles.colors.gray300,
+    flex: 1,
     paddingHorizontal: 10,
     height: 50,
     fontSize: 18,

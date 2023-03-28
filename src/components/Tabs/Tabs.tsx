@@ -57,7 +57,6 @@ const BottomTabsOverview = () => {
 }
 
 const Tabs: FC = () => {
-
   return (
     <>
       <StatusBar style='auto' />
@@ -79,9 +78,11 @@ const Tabs: FC = () => {
           />
           <Stack.Screen
             options={{
-              headerStyle: { backgroundColor: GlobalStyles.colors.teal400},
-              headerTintColor: GlobalStyles.colors.gray50,
-              presentation: 'modal'
+              headerStyle: { backgroundColor: GlobalStyles.colors.gray50},
+              headerTintColor: GlobalStyles.colors.gray900,
+              presentation: 'modal',
+              headerShown: false,
+              title: ScreenEnum.RecipeDetails,
             }}
             name={ScreenEnum.RecipeDetails}
             component={RecipeDetailScreen}

@@ -22,7 +22,7 @@ const RecipeItem: FC<RecipeProps> = ({ recipe, onPress }) => {
 
   return (
     <View style={styles.item}>
-      <Pressable onPress={onPress}>
+      <Pressable onPress={onPress}  style={({ pressed }) => pressed && styles.pressedItem}>
         <View>
           <Image source={{ uri: image }} style={styles.image} />
         </View>
@@ -60,5 +60,8 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     textTransform: 'uppercase',
     color: GlobalStyles.colors.gray500,
+  },
+  pressedItem: {
+    opacity: 0.5
   }
 })

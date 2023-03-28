@@ -14,7 +14,9 @@ export default Spinner;
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginTop: 20,
+    flex: 1,
+    padding: 24,
+    justifyContent: 'center',
     alignItems: 'center'
   }
 })

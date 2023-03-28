@@ -9,6 +9,7 @@ export type ScreenNames = [
   Screen.BottomTabsOverview,
   Screen.RecipeDetails
 ]
+
 export type RootStackParamList = {
   Home: undefined;
   Recipe: undefined;

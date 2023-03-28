@@ -7,9 +7,7 @@ export interface IRecipe {
   dietLabels: string[];
   healthLabels: string[];
   ingredientLines: string[];
-  ingredients: Ingredient[];
   cuisineType: string[];
-
 }
 
 export interface Recipe {
@@ -20,12 +18,4 @@ export interface RecipesState {
   recipes: Recipe[];
   isLoading: boolean;
   error: string;
-}
-
-interface Ingredient {
-  text: string;
-  quantity: number;
-  measure: string;
-  food: string;
-  weight: string
 }

@@ -2,11 +2,12 @@ import { FC } from 'react';
 import {
   NativeSyntheticEvent,
   StyleSheet,
-  TextInput, TextInputChangeEventData,
+  TextInputChangeEventData,
   View
 } from 'react-native';
 import IconButton from '../UI/IconButton';
 import { GlobalStyles } from '../../constants/styles';
+import Input from '../UI/Input';
 
 interface SearchRecipeProps {
   recipe: string;
@@ -21,11 +22,12 @@ const SearchRecipe: FC<SearchRecipeProps> = ({ recipe, onChange }) => {
         size={32}
         color={GlobalStyles.colors.gray300}
       />
-      <TextInput
-        value={recipe}
-        onChange={onChange}
-        style={styles.input}
-        placeholder='Search recipe...'
+      <Input
+        textInputConfig={{
+          value: recipe,
+          onChange: onChange,
+          placeholder: 'Search recipe...',
+        }}
       />
     </View>
   )
@@ -40,11 +42,5 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: GlobalStyles.colors.gray300,
     marginVertical: 32,
-  },
-  input: {
-    flex: 1,
-    paddingHorizontal: 10,
-    height: 50,
-    fontSize: 18,
   }
 })
