@@ -28,6 +28,7 @@ const SearchRecipe: FC<SearchRecipeProps> = ({ recipe, onChange }) => {
           onChange: onChange,
           placeholder: 'Search recipe...',
         }}
+        style={{ flex: 1 }}
       />
     </View>
   )
@@ -37,6 +38,7 @@ export default SearchRecipe;
 
 const styles = StyleSheet.create({
   container: {
+    width: '100%',
     flexDirection: 'row',
     borderRadius: 16,
     borderWidth: 1,

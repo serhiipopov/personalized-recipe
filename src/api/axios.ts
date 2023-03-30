@@ -1,8 +1,10 @@
 import axios from 'axios';
 
-const instance = axios.create({
-  withCredentials: true,
+export const instanceRecipe = axios.create({
   baseURL: 'https://api.edamam.com/api/recipes/v2'
 })
 
-export default instance;
+export const instanceAuth = axios.create({
+  baseURL: 'https://identitytoolkit.googleapis.com/v1'
+})
+

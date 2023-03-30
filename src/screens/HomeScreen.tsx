@@ -7,7 +7,6 @@ const HomeScreen: FC = () => {
     <BaseLayout>
       <HomeContainer />
     </BaseLayout>
-
   )
 }
 

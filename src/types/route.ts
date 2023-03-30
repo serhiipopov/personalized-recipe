@@ -15,6 +15,8 @@ export type RootStackParamList = {
   Recipe: undefined;
   BuyList: undefined;
   Settings: undefined;
+  Login: undefined;
+  Signup: undefined;
   BottomTabsOverview: undefined;
   RecipeDetails: { uri: string }
 };

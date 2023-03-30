@@ -1,6 +1,6 @@
 export const GlobalStyles = {
   colors: {
-    cyan100: '#c4f1f9',
+    cyan100: '#d7eaf3',
     cyan700: '#0987a0',
     cyan800: '#086f83',
     teal300: '#4fd1c5',
@@ -15,6 +15,7 @@ export const GlobalStyles = {
     gray300: '#cbd5e0',
     gray500: '#7d8085',
     gray900: '#171923',
-    orange200: '#FEEBC8'
+    orange200: '#FEEBC8',
+    orange500: '#DD6B20',
   }
 }

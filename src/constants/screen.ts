@@ -4,5 +4,7 @@ export enum Screen {
   BuyList = 'BuyList',
   Settings = 'Settings',
   BottomTabsOverview = 'BottomTabsOverview',
-  RecipeDetails = 'RecipeDetails'
+  RecipeDetails = 'RecipeDetails',
+  Login = 'Login',
+  Signup = 'Signup',
 }
