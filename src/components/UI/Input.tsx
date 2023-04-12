@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import {
   View,
   Text,
@@ -14,24 +13,28 @@ interface InputProps {
   style?: StyleProp<any>;
   isInvalid?: boolean;
   onChangeText?: (id: string, value: string) => void;
+  error?: string;
 }
 
-const Input: FC<InputProps> = ({
+const Input = ({
   label,
   style,
   isInvalid,
   onChangeText,
   textInputConfig,
-  }) => {
+  error
+  }: InputProps) => {
   const inputStyles = [styles.input, isInvalid && styles.inputInvalid];
   const labelStyles = [styles.label, isInvalid && styles.labelInvalid];
+  const inputContainerStyles = [styles.inputContainer, isInvalid && styles.inputContainerInvalid];
 
   return (
     <View>
       {label && <Text style={labelStyles}>{label}</Text>}
-      <View style={[styles.inputContainer, style]}>
+      <View style={[inputContainerStyles, style]}>
         <TextInput style={inputStyles} onChangeText={onChangeText} {...textInputConfig} />
       </View>
+      {error && <Text style={styles.labelInvalid}>{error}</Text>}
     </View>
   )
 }
@@ -42,6 +45,11 @@ const styles = StyleSheet.create({
   inputContainer: {
     marginHorizontal: 4,
     marginVertical: 8,
+  },
+  inputContainerInvalid: {
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: GlobalStyles.colors.error500
   },
   input: {
     flex: 1,
@@ -59,4 +67,3 @@ const styles = StyleSheet.create({
     color: GlobalStyles.colors.error500,
   }
 })
-

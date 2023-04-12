@@ -1,29 +1,26 @@
-import { FC, useState } from 'react';
 import { Alert, Button, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { resetFormFields } from '../../store/auth/slice';
 import AuthForm from './AuthForm';
-import { validateEmail, validatePassword } from '../../utils/validatiors';
-import { RootStackParamList } from '../../types/route';
+import { isMaxLength, validateEmail } from '../../utils/validatiors';
 
+import { Credentials } from '../../types/auth';
+import { RootStackParamList } from '../../types/route';
 import { Screen } from '../../constants/screen';
-import { Strings } from '../../constants/strings';
+import { STRINGS } from '../../constants/strings';
 import { GlobalStyles } from '../../constants/styles';
-import { Credentials, CredentialsInvalid } from '../../types/auth';
 
 interface AuthContentProps {
-  onAuthenticate: (email: string, password: string) => Promise<void>;
+  onAuthenticate: (credentials: Credentials) => Promise<void>;
   isLogin?: boolean;
 }
 
-const AuthContent: FC<AuthContentProps>  = ({ onAuthenticate, isLogin }) => {
-  const [credentialsInvalid, setCredentialsInvalid] = useState<CredentialsInvalid>({
-    email: false,
-    password: false,
-    confirmEmail: false,
-    confirmPassword: false,
-  })
+const AuthContent = ({ onAuthenticate, isLogin }: AuthContentProps) => {
+  const { errors, isAuthenticated } = useAppSelector(state => state.authReducer);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const dispatch = useAppDispatch();
 
   const switchAuthModeHandler = () => {
     if (isLogin) {
@@ -36,29 +33,31 @@ const AuthContent: FC<AuthContentProps>  = ({ onAuthenticate, isLogin }) => {
   const submitHandler = async (credentials: Credentials) => {
     let { email, password, confirmEmail, confirmPassword } = credentials;
 
-    email = email.trim();
-    password = password.trim();
-
+    email = email?.trim();
+    password = password?.trim();
     const emailIsInvalid = validateEmail(email);
-    const passwordIsValid = validatePassword(password);
+    const passwordIsValid = isMaxLength(password, 7);
     const emailsAreEqual = email === confirmEmail;
     const passwordsAreEqual = password === confirmPassword;
 
-    if (
+    const fieldsIsInvalid =
       !emailIsInvalid ||
       !passwordIsValid ||
       (!isLogin && (!emailsAreEqual || !passwordsAreEqual))
-    ) {
-      Alert.alert(Strings.invalidInput, Strings.pleaseCheck)
-      setCredentialsInvalid({
-        email: !emailIsInvalid,
-        confirmEmail: !emailIsInvalid || !emailsAreEqual,
-        password: !passwordIsValid,
-        confirmPassword: !passwordIsValid || !passwordsAreEqual
-      })
+
+    if (fieldsIsInvalid) {
+      Alert.alert(STRINGS.invalidInput, STRINGS.pleaseCheck)
       return;
     }
-    await onAuthenticate(email, password);
+    await onAuthenticate(credentials)
+
+    if (!isAuthenticated) {
+      navigation.navigate(Screen.Login)
+    } else if (isAuthenticated) {
+      navigation.navigate(Screen.Home)
+    }
+
+    if (!fieldsIsInvalid) return dispatch(resetFormFields())
   }
 
   return (
@@ -66,11 +65,11 @@ const AuthContent: FC<AuthContentProps>  = ({ onAuthenticate, isLogin }) => {
       <AuthForm
         isLogin={isLogin}
         onSubmit={submitHandler}
-        credentialsInvalid={credentialsInvalid}
+        errors={errors}
       />
       <View>
         <Button
-          title={isLogin ? Strings.createUser : Strings.logInInstead}
+          title={isLogin ? STRINGS.createUser : STRINGS.logInInstead}
           color={GlobalStyles.colors.teal400}
           onPress={switchAuthModeHandler}
         />

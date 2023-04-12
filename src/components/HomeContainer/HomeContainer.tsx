@@ -1,8 +1,7 @@
-import { FC } from 'react';
 import { StyleSheet, View, Text, Pressable } from 'react-native';
 import { useLinkTo } from '@react-navigation/native';
 
-import { Strings } from '../../constants/strings';
+import { STRINGS } from '../../constants/strings';
 import { GlobalStyles } from '../../constants/styles';
 import { Screen } from '../../constants/screen';
 
@@ -19,9 +18,8 @@ const pressStyles = (pressed: boolean) => {
   )
 }
 
-const HomeContainer: FC = () => {
+const HomeContainer = () => {
   const linkTo = useLinkTo();
-
   const onLintToByuList = () => linkTo(`/${Screen.BuyList}`);
 
   return (
@@ -31,7 +29,7 @@ const HomeContainer: FC = () => {
           style={({ pressed }) => pressStyles(pressed)}
           onPress={onLintToByuList}
         >
-        <Text style={styles.textPress}>{Strings.whatBuy}</Text>
+        <Text style={styles.textPress}>{STRINGS.whatBuy}</Text>
         </Pressable>
       </View>
      <View style={styles.wrapperPress}>
@@ -41,10 +39,9 @@ const HomeContainer: FC = () => {
        <Text style={styles.textPress}>2</Text>
        </Pressable>
      </View>
-
     </View>
-  );
-};
+  )
+}
 
 export default HomeContainer;
 

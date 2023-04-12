@@ -1,8 +1,7 @@
-import { FC } from 'react';
 import BaseLayout from '../components/BaseLayout/BaseLayout';
 import HomeContainer from '../components/HomeContainer/HomeContainer';
 
-const HomeScreen: FC = () => {
+const HomeScreen = () => {
   return (
     <BaseLayout>
       <HomeContainer />

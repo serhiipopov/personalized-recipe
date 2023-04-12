@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -16,7 +15,7 @@ interface RecipesListProps {
   navigation: StackNavigation;
 }
 
-const RecipesList: FC<RecipesListProps> = ({ recipes, navigation }) => {
+const RecipesList = ({ recipes, navigation }: RecipesListProps) => {
   const renderRecipeItem = (recipeData: Recipe, ) => {
     const pressHandler = () => {
       navigation.navigate(Screen.RecipeDetails, { uri: recipeData.recipe.uri } )

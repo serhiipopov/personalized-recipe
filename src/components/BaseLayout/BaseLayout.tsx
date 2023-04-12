@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { GlobalStyles } from '../../constants/styles';
 
@@ -6,7 +5,7 @@ interface BaseLayoutProps {
   children: React.ReactNode;
 }
 
-const BaseLayout: FC<BaseLayoutProps> = ({ children }) => {
+const BaseLayout = ({ children }: BaseLayoutProps) => {
   return (
     <View style={styles.container}>
       {children}

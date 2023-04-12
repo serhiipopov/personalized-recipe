@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import { NativeSyntheticEvent, Text, TextInputChangeEventData } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { fetchRecipesAsync } from '../store/recipe/slice';
@@ -14,7 +14,7 @@ interface RecipeScreenProps {
   navigation: StackNavigation;
 }
 
-const RecipeScreen: FC<RecipeScreenProps> = ({ navigation }) => {
+const RecipeScreen = ({ navigation }: RecipeScreenProps) => {
   const [searchRecipe, setSearchRecipe] = useState<string>('');
   const { recipes, error, isLoading } = useAppSelector(state => state.recipesReducer);
   const dispatch = useAppDispatch();

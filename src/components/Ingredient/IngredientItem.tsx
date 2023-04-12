@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { GlobalStyles } from '../../constants/styles';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
@@ -10,12 +9,12 @@ interface IngredientItemProps {
   isCompleted: boolean;
 }
 
-const IngredientItem: FC<IngredientItemProps> = ({
+const IngredientItem = ({
   ingredient,
   onDeleteItem,
   onToggleItem,
   isCompleted,
-  }) => {
+  }: IngredientItemProps) => {
   return (
     <View style={styles.container}>
 

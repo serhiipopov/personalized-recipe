@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useAppSelector } from '../../hooks/redux';
 import IngredientItem from './IngredientItem';
@@ -9,7 +8,7 @@ interface IngredientListProps {
   onToggleItem: (id: string) => void;
 }
 
-const IngredientList: FC<IngredientListProps> = ({ onDeleteItem, onToggleItem }) => {
+const IngredientList = ({ onDeleteItem, onToggleItem }: IngredientListProps) => {
   const { ingredients, isLoading, error } = useAppSelector(state => state.ingredientsReducer);
 
   if (isLoading) return <Spinner />

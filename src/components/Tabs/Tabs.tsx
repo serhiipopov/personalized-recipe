@@ -1,10 +1,11 @@
-import { FC } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { Pressable } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { logOut } from '../../store/auth/slice';
 
 import HomeScreen from '../../screens/HomeScreen';
 import RecipeScreen from '../../screens/RecipeScreen';
@@ -22,36 +23,54 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const BottomTabsOverview = () => {
+  const dispatch = useAppDispatch();
+  const { isAuthenticated } = useAppSelector(state => state.authReducer);
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const logOutHandler = () => dispatch(logOut());
+
   return (
-    <>
-      <Tab.Navigator
-        screenOptions={{
-          headerStyle: { backgroundColor: GlobalStyles.colors.teal500 },
-          headerTintColor: GlobalStyles.colors.cyan100,
-          tabBarStyle: { backgroundColor: GlobalStyles.colors.teal500 },
-          tabBarActiveTintColor: GlobalStyles.colors.teal900,
-          tabBarInactiveTintColor: GlobalStyles.colors.cyan100,
-          headerRight: () => (
-            <Pressable style={{ marginRight: 30 }}>
-              <Ionicons name='person-outline' color={GlobalStyles.colors.gray50} size={26}/>
-            </Pressable>
-          )
+    <Tab.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: GlobalStyles.colors.teal500 },
+        headerTintColor: GlobalStyles.colors.cyan100,
+        tabBarStyle: { backgroundColor: GlobalStyles.colors.teal500 },
+        tabBarActiveTintColor: GlobalStyles.colors.teal900,
+        tabBarInactiveTintColor: GlobalStyles.colors.cyan100,
+        headerRight: () => (
+          <>
+            {!isAuthenticated ?
+              (
+                <Pressable style={{ marginRight: 30 }} onPress={() => navigation.navigate(ScreenEnum.Login)}>
+                  <Ionicons name='person-outline' color={GlobalStyles.colors.gray50} size={26} />
+                </Pressable>
+              )
+              :
+              (
+                <Pressable style={{ marginRight: 30 }} onPress={logOutHandler}>
+                  <Ionicons name='exit-outline' color={GlobalStyles.colors.gray50} size={26} />
+                </Pressable>
+              )
+            }
+          </>
+        )
+      }}
+    >
+      <Tab.Screen
+        name={ScreenEnum.Home}
+        component={HomeScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => <Ionicons name='home-outline' color={color} size={size} />
         }}
-      >
-        <Tab.Screen
-          name={ScreenEnum.Home}
-          component={HomeScreen}
-          options={{
-            tabBarIcon: ({ color, size }) => <Ionicons name='home-outline' color={color} size={size} />
-          }}
-        />
-        <Tab.Screen
-          name={ScreenEnum.Recipe}
-          component={RecipeScreen}
-          options={{
-            tabBarIcon: ({ color, size }) => <Ionicons name='reader-outline' color={color} size={size} />
-          }}
-        />
+      />
+      <Tab.Screen
+        name={ScreenEnum.Recipe}
+        component={RecipeScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => <Ionicons name='reader-outline' color={color} size={size} />
+        }}
+      />
+      {isAuthenticated && (
         <Tab.Screen
           name={ScreenEnum.Settings}
           component={SettingsScreen}
@@ -59,19 +78,12 @@ const BottomTabsOverview = () => {
             tabBarIcon: ({ color, size }) => <Ionicons name='settings-outline' color={color} size={size} />
           }}
         />
-        <Tab.Screen
-          name={ScreenEnum.Login}
-          component={LoginScreen}
-          options={{
-            tabBarIcon: ({ color, size }) => <Ionicons name='settings-outline' color={color} size={size} />
-          }}
-        />
-      </Tab.Navigator>
-    </>
+      )}
+    </Tab.Navigator>
   )
 }
 
-const Tabs: FC = () => {
+const Tabs = () => {
   return (
     <>
       <StatusBar style='auto' />
@@ -84,7 +96,7 @@ const Tabs: FC = () => {
           />
           <Stack.Screen
             options={{
-              headerStyle: { backgroundColor: GlobalStyles.colors.teal400},
+              headerStyle: { backgroundColor: GlobalStyles.colors.teal400 },
               headerTintColor: GlobalStyles.colors.gray50,
               presentation: 'modal'
             }}
@@ -93,7 +105,7 @@ const Tabs: FC = () => {
           />
           <Stack.Screen
             options={{
-              headerStyle: { backgroundColor: GlobalStyles.colors.gray50},
+              headerStyle: { backgroundColor: GlobalStyles.colors.gray50 },
               headerTintColor: GlobalStyles.colors.gray900,
               presentation: 'modal',
               headerShown: false,
@@ -104,7 +116,7 @@ const Tabs: FC = () => {
           />
           <Stack.Screen
             options={{
-              headerStyle: { backgroundColor: GlobalStyles.colors.teal400},
+              headerStyle: { backgroundColor: GlobalStyles.colors.teal400 },
               headerTintColor: GlobalStyles.colors.gray50,
             }}
             name={ScreenEnum.Login}
@@ -112,7 +124,7 @@ const Tabs: FC = () => {
           />
           <Stack.Screen
             options={{
-              headerStyle: { backgroundColor: GlobalStyles.colors.teal400},
+              headerStyle: { backgroundColor: GlobalStyles.colors.teal400 },
               headerTintColor: GlobalStyles.colors.gray50,
             }}
             name={ScreenEnum.Signup}

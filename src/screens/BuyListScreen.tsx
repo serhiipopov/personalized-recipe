@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { useAppDispatch } from '../hooks/redux';
 import { removeIngredient, toggleIngredient } from '../store/ingredients/slice';
 import { StyleSheet, View } from 'react-native';
@@ -6,7 +5,7 @@ import IngredientInput from '../components/Ingredient/IngredientInput';
 import IngredientList from '../components/Ingredient/IngredientList';
 import { GlobalStyles } from '../constants/styles';
 
-const BuyListScreen: FC = () => {
+const BuyListScreen = () => {
   const dispatch = useAppDispatch();
 
   const deleteIngredientHandler = (id: string) => {

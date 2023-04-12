@@ -1,4 +1,4 @@
-import { FC, memo } from 'react';
+import { memo } from 'react';
 import {
   View,
   Text,
@@ -14,7 +14,7 @@ interface RecipeProps {
   onPress: () => void;
 }
 
-const RecipeItem: FC<RecipeProps> = ({ recipe, onPress }) => {
+const RecipeItem = ({ recipe, onPress }: RecipeProps) => {
   const { label, image, calories } = recipe.recipe;
 
   const numCalories = Number(calories).toFixed(1);

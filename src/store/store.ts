@@ -16,6 +16,8 @@ const persistConfig = {
   storage: AsyncStorage,
 }
 
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
 export const setupStore = (preloadedState?: any) => (
   configureStore({
     reducer: persistedReducer,
@@ -54,10 +56,8 @@ export function useStore(initialState: any) {
   return useMemo(() => initializeStore(initialState), [initialState]);
 }
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
-
 export type RootState = ReturnType<typeof rootReducer>
 export type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
 
 store = setupStore()
-export const persist = persistStore(store)
+// export const persist = persistStore(store)

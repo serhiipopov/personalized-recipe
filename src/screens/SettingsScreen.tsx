@@ -1,8 +1,7 @@
-import { FC } from 'react';
 import { Text } from 'react-native';
 import BaseLayout from '../components/BaseLayout/BaseLayout';
 
-const SettingsScreen: FC = () => {
+const SettingsScreen = () => {
   return (
     <BaseLayout>
       <Text>Settings!</Text>

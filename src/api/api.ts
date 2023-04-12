@@ -12,16 +12,20 @@ export const RecipeAPI = {
 
 export const AuthAPI = {
   async authenticate(mode: string, email: string, password: string) {
-    return await instanceAuth.post(`/accounts:${mode}?key=${AUTH_API_KEY}`, {
+    const response = await instanceAuth.post(`/accounts:${mode}?key=${AUTH_API_KEY}`, {
       email,
       password,
       returnSecureToken: true
     })
+
+    const token = response.data.idToken
+
+    return token
   },
-  async createUser(email: string, password: string) {
-    return await AuthAPI.authenticate('signUp', email, password)
+  createUser(email: string, password: string) {
+    return  AuthAPI.authenticate('signUp', email, password)
   },
-  async login(email: string, password: string) {
-    return await AuthAPI.authenticate('signInWithPassword', email, password)
-  }
+  login(email: string, password: string) {
+    return AuthAPI.authenticate('signInWithPassword', email, password)
+  },
 }

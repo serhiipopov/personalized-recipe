@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { GlobalStyles } from '../../constants/styles';
 
@@ -7,10 +6,10 @@ interface DetailItemProps {
   details?: string[];
 }
 
-const DetailItemsWrapper: FC<DetailItemProps> = ({
+const DetailItemsWrapper = ({
   details,
   label,
-  }) => {
+  }: DetailItemProps) => {
   return (
     <View style={styles.details}>
       <Text style={styles.label}>{label}</Text>

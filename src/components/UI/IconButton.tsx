@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { StyleSheet, Pressable, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -10,13 +9,13 @@ interface IconButtonProps {
   disabled?: boolean;
 }
 
-const IconButton: FC<IconButtonProps> = ({
+const IconButton = ({
   name,
   color,
   size,
   onPress,
   disabled,
-  }) => {
+  }: IconButtonProps) => {
   return (
     <Pressable
       onPress={onPress}

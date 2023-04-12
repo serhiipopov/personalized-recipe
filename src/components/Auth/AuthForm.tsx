@@ -1,45 +1,35 @@
-import { FC, useState } from 'react';
 import { StyleSheet, Button, View } from 'react-native';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { setFormFields } from '../../store/auth/slice';
 import Input from '../UI/Input';
-import { Strings } from '../../constants/strings';
+import { Credentials } from '../../types/auth';
+import { STRINGS } from '../../constants/strings';
 import { GlobalStyles } from '../../constants/styles';
-import { Credentials, CredentialsInvalid } from '../../types/auth';
 
 interface AuthFormProps {
   isLogin?: boolean;
   onSubmit: (credentials: Credentials) => void;
-  credentialsInvalid: CredentialsInvalid;
+  errors: Record<string, string>;
 }
 
-const AuthForm: FC<AuthFormProps> = ({ isLogin, onSubmit, credentialsInvalid }) => {
-  const [formFields, setFormFields] = useState({
-    email: '',
-    password: '',
-    confirmEmail: '',
-    confirmPassword: '',
-  })
+const AuthForm = ({ isLogin, onSubmit, errors }: AuthFormProps) => {
+  const dispatch = useAppDispatch();
+  const { formFields } = useAppSelector(state => state.authReducer);
 
   const { email, password, confirmPassword, confirmEmail } = formFields;
 
   const onUpdateValue = (id: string, value: string) => {
-    setFormFields({...formFields, [id]: value});
+    dispatch(setFormFields({ id, value }))
   }
 
   const submitHandler = () => {
     onSubmit({
-      email: email,
-      password: password,
-      confirmPassword: confirmPassword,
-      confirmEmail: confirmEmail
+      email,
+      password,
+      confirmPassword,
+      confirmEmail,
     })
   }
-
-  // const {
-  //   email: email,
-  //   password: password,
-  //   confirmEmail: confirmEmail,
-  //   confirmPassword: confirmPassword,
-  // } = credentialsInvalid
 
   return (
     <View style={styles.containerForm}>
@@ -47,11 +37,11 @@ const AuthForm: FC<AuthFormProps> = ({ isLogin, onSubmit, credentialsInvalid }) 
         label='Email'
         style={styles.input}
         onChangeText={(email) => onUpdateValue('email', email)}
+        error={errors?.email}
         textInputConfig={{
           id: 'email',
           value: email,
           keyBoardType: 'email-address',
-          // autoCapitalize: false,
         }}
       />
       {!isLogin && (
@@ -60,11 +50,11 @@ const AuthForm: FC<AuthFormProps> = ({ isLogin, onSubmit, credentialsInvalid }) 
             label='Confirm Email'
             style={styles.input}
             onChangeText={(confirmEmail) => onUpdateValue('confirmEmail', confirmEmail)}
+            error={errors?.confirmEmail}
             textInputConfig={{
               id: 'confirmEmail',
               value: confirmEmail,
               keyBoardType: 'email-address',
-              // autoCapitalize: false,
             }}
           />
         </>
@@ -73,11 +63,11 @@ const AuthForm: FC<AuthFormProps> = ({ isLogin, onSubmit, credentialsInvalid }) 
         label='Password'
         style={styles.input}
         onChangeText={(password) => onUpdateValue('password', password)}
+        error={errors?.password}
         textInputConfig={{
           id: 'password',
           value: password,
           secureTextEntry: true,
-          // autoCapitalize: false,
         }}
       />
       {!isLogin && (
@@ -86,17 +76,17 @@ const AuthForm: FC<AuthFormProps> = ({ isLogin, onSubmit, credentialsInvalid }) 
             label='Confirm Password'
             style={styles.input}
             onChangeText={(confirmPassword) => onUpdateValue('confirmPassword', confirmPassword)}
+            error={errors?.confirmPassword}
             textInputConfig={{
               id: 'confirmPassword',
               value: confirmPassword,
-              // autoCapitalize: false,
               secureTextEntry: true,
             }}
           />
         </>
       )}
       <Button
-        title={isLogin ? Strings.logIn : Strings.sigUp}
+        title={isLogin ? STRINGS.logIn : STRINGS.sigUp}
         color={GlobalStyles.colors.cyan800}
         onPress={submitHandler}
       />
@@ -114,4 +104,3 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   }
 })
-

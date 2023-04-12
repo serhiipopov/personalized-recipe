@@ -1,26 +1,28 @@
-import { FC, useState } from 'react';
-import { AuthAPI } from '../api/api';
+import { useState } from 'react';
 import { Alert } from 'react-native';
+import { useAppDispatch } from '../hooks/redux';
+import { createUserAsync } from '../store/auth/slice';
 
 import BaseLayout from '../components/BaseLayout/BaseLayout';
 import AuthContent from '../components/Auth/AuthContent';
 import Spinner from '../components/UI/Spinner';
-import { Strings } from '../constants/strings';
+import { STRINGS } from '../constants/strings';
+import { Credentials } from '../types/auth';
 
-const SignupScreen: FC = () => {
-  const [isAuth, setIsAuth] = useState<boolean>(false);
+const SignupScreen = () => {
+  const dispatch = useAppDispatch();
+  const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false);
 
-  const signupHandler = async (email: string, password: string) => {
-    setIsAuth(true);
+  const signupHandler = async (credentials: Credentials) => {
     try {
-      await AuthAPI.createUser(email, password)
+      await dispatch(createUserAsync(credentials))
     } catch (error) {
-      Alert.alert(Strings.authenticationFailed, Strings.couldNotCreateUser)
+      Alert.alert(STRINGS.authenticationFailed, STRINGS.couldNotCreateUser)
     }
-    setIsAuth(false);
+    setIsAuthenticating(false)
   }
 
-  if (isAuth) return <Spinner />
+  if (isAuthenticating) return <Spinner />
 
   return (
     <BaseLayout>

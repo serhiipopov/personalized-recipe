@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { useMemo } from 'react';
 import {
   View,
   Text,
@@ -21,7 +21,7 @@ interface RecipeDetailsProps {
 //   return uri.split('#recipe_').pop()
 // }
 
-const RecipeDetails: FC<RecipeDetailsProps> = ({ route }) => {
+const RecipeDetails = ({ route }: RecipeDetailsProps) => {
   const { recipes } = useAppSelector(state => state.recipesReducer)
   const recipeId = route.params?.uri;
   const selectedRecipe = useMemo(() => {

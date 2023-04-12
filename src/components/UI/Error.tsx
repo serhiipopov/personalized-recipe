@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { Strings } from '../../constants/strings';
 
@@ -6,7 +5,7 @@ interface ErrorProps {
   message: string;
 }
 
-const Error: FC<ErrorProps> = ({ message }) => {
+const Error = ({ message }: ErrorProps) => {
   return (
     <View style={styles.wrapper}>
       <Text>{Strings.anError}</Text>

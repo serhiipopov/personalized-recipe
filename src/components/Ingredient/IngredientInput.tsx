@@ -1,11 +1,11 @@
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { useAppDispatch } from '../../hooks/redux';
 import { addIngredient } from '../../store/ingredients/slice';
 import { GlobalStyles } from '../../constants/styles';
 import IconButton from '../UI/IconButton';
 
-const IngredientInput: FC = () => {
+const IngredientInput = () => {
   const [input, setInput] = useState<string>('');
   const dispatch = useAppDispatch();
 

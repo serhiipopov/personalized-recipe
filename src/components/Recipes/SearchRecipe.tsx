@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import {
   NativeSyntheticEvent,
   StyleSheet,
@@ -14,7 +13,7 @@ interface SearchRecipeProps {
   onChange: (e: NativeSyntheticEvent<TextInputChangeEventData>) => void;
 }
 
-const SearchRecipe: FC<SearchRecipeProps> = ({ recipe, onChange }) => {
+const SearchRecipe = ({ recipe, onChange }: SearchRecipeProps) => {
   return (
     <View style={styles.container}>
       <IconButton
