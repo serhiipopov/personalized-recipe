@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import { useAppDispatch } from '../hooks/redux';
-import { loginAsync } from '../store/auth/slice';
+import { loginAsync, resetState } from '../store/auth/slice';
 
 import BaseLayout from '../components/BaseLayout/BaseLayout';
 import AuthContent from '../components/Auth/AuthContent';
@@ -12,6 +12,10 @@ import { STRINGS } from '../constants/strings';
 const LoginScreen = () => {
   const dispatch = useAppDispatch();
   const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false);
+
+  useEffect(() => {
+    dispatch(resetState());
+  }, [dispatch]);
 
   const loginHandler = async (user: Login) => {
     const { email, password } = user;

@@ -1,14 +1,21 @@
+import { useEffect } from 'react';
 import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
-import {  store } from './src/store/store';
+import { store } from './src/store/store';
 import Tabs from './src/components/Tabs/Tabs';
+import { storageService } from './src/utils/storageService';
 
 const App = () => {
+
+  useEffect(() => {
+    const getToken = async () => {
+      return await storageService.getStateFromStorage('token');
+    }
+    getToken();
+  }, []);
+
   return (
     <Provider store={store}>
-      {/*<PersistGate loading={null} persistor={persist}>*/}
-        <Tabs />
-      {/*</PersistGate>*/}
+      <Tabs />
     </Provider>
   )
 }

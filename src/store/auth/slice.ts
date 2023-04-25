@@ -2,9 +2,9 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AuthState, Credentials, Login } from '../../types/auth';
 import { AuthAPI } from '../../api/api';
 import { validateErrors, validateLogin, validateSignUp } from '../../utils/validatiors';
+import { storageService } from '../../utils/storageService';
 
 export const initialState: AuthState = {
-  token: '',
   isAuthenticated: false,
   formFields: {
     email: '',
@@ -17,19 +17,15 @@ export const initialState: AuthState = {
 
 export const createUserAsync = createAsyncThunk(
   'createUser/createUserAsync',
-  async (createUser: Credentials, { rejectWithValue }) => {
+  async (credentials: Credentials, { rejectWithValue }) => {
     try {
-      const { email, password, confirmEmail, confirmPassword } = createUser;
-      const errors = validateErrors({ email, password, confirmEmail, confirmPassword }, validateSignUp)
-
+      const { email, password, confirmEmail, confirmPassword } = credentials;
+      const errors = validateErrors({ email, password, confirmEmail, confirmPassword }, validateSignUp, {})
       if (errors) {
         return rejectWithValue({ errors });
       }
 
-      const response = await AuthAPI.createUser(email, password)
-        .then(response => response)
-
-      return response;
+      return await AuthAPI.createUser(email, password)
 
     } catch (error) {
       return rejectWithValue(error)
@@ -41,16 +37,32 @@ export const loginAsync = createAsyncThunk(
   'login/loginAsync',
   async ({ email, password }: Login, { rejectWithValue }) => {
     try {
-      const errors = validateErrors({ email, password } , validateLogin)
+      const errors = validateErrors({ email, password }, validateLogin, {})
       if (errors) {
         return rejectWithValue({ errors });
       }
-      const response = await AuthAPI.login(email, password)
-        .then(response => response)
 
-      return response;
+      return await AuthAPI.login(email, password)
+
     } catch (error) {
       return rejectWithValue(error)
+    }
+  }
+)
+
+export const logOutAsync = createAsyncThunk(
+  'logOut/logOutAsync',
+  async (_, { rejectWithValue }) => {
+
+    try {
+      const token = await storageService.getStateFromStorage('token')
+      if (token) {
+        await storageService.removeKey('token')
+      }
+
+      return null
+    } catch (error: unknown) {
+      return rejectWithValue(error);
     }
   }
 )
@@ -59,42 +71,39 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logOut: (state) => {
-      state.token = ''
-      state.isAuthenticated = false
-    },
+    resetState: () => initialState,
     setFormFields: (state, action: PayloadAction<{ id: string, value: string }>) => {
       const { id, value } = action.payload
       state.formFields = { ...state.formFields, [id]: value }
-    },
-    resetFormFields: (state) => {
-      state.formFields = initialState.formFields
     }
   },
   extraReducers: (builder) => {
     builder
       .addCase(createUserAsync.fulfilled.type, (state, action: PayloadAction<AuthState>) => {
-        state.isAuthenticated = true
-        state.token = action.payload.token
+        state.formFields = { ...action.payload.formFields };
+        state.isAuthenticated = true;
       })
       .addCase(createUserAsync.rejected.type, (state, action: PayloadAction<AuthState>) => {
         state.errors = action.payload.errors
       })
     builder
       .addCase(loginAsync.fulfilled.type, (state, action: PayloadAction<AuthState>) => {
-        state.isAuthenticated = true
-        state.token = action.payload.token
+        state.isAuthenticated = true;
       })
       .addCase(loginAsync.rejected.type, (state, action: PayloadAction<AuthState>) => {
         state.errors = action.payload.errors
+        state.isAuthenticated = false
+      })
+    builder
+      .addCase(logOutAsync.fulfilled.type, (state) => {
+        state.isAuthenticated = false
       })
   }
 })
 
 export const {
-  logOut,
+  resetState,
   setFormFields,
-  resetFormFields,
 } = authSlice.actions
 
 export default authSlice.reducer;

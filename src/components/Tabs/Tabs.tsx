@@ -5,7 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Pressable } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { logOut } from '../../store/auth/slice';
+import { logOutAsync } from '../../store/auth/slice';
 
 import HomeScreen from '../../screens/HomeScreen';
 import RecipeScreen from '../../screens/RecipeScreen';
@@ -27,7 +27,7 @@ const BottomTabsOverview = () => {
   const { isAuthenticated } = useAppSelector(state => state.authReducer);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const logOutHandler = () => dispatch(logOut());
+  const logOutHandler = () => dispatch(logOutAsync());
 
   return (
     <Tab.Navigator
@@ -84,6 +84,7 @@ const BottomTabsOverview = () => {
 }
 
 const Tabs = () => {
+
   return (
     <>
       <StatusBar style='auto' />

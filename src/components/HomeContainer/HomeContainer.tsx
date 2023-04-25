@@ -4,6 +4,8 @@ import { useLinkTo } from '@react-navigation/native';
 import { STRINGS } from '../../constants/strings';
 import { GlobalStyles } from '../../constants/styles';
 import { Screen } from '../../constants/screen';
+import {storageService} from '../../utils/storageService';
+import {useEffect} from 'react';
 
 const pressStyles = (pressed: boolean) => {
   return (

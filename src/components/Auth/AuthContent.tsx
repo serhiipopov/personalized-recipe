@@ -1,10 +1,8 @@
-import { Alert, Button, StyleSheet, View } from 'react-native';
+import { Button, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { resetFormFields } from '../../store/auth/slice';
+import { useAppSelector } from '../../hooks/redux';
 import AuthForm from './AuthForm';
-import { isMaxLength, validateEmail } from '../../utils/validatiors';
 
 import { Credentials } from '../../types/auth';
 import { RootStackParamList } from '../../types/route';
@@ -20,7 +18,6 @@ interface AuthContentProps {
 const AuthContent = ({ onAuthenticate, isLogin }: AuthContentProps) => {
   const { errors, isAuthenticated } = useAppSelector(state => state.authReducer);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const dispatch = useAppDispatch();
 
   const switchAuthModeHandler = () => {
     if (isLogin) {
@@ -31,33 +28,12 @@ const AuthContent = ({ onAuthenticate, isLogin }: AuthContentProps) => {
   }
 
   const submitHandler = async (credentials: Credentials) => {
-    let { email, password, confirmEmail, confirmPassword } = credentials;
-
-    email = email?.trim();
-    password = password?.trim();
-    const emailIsInvalid = validateEmail(email);
-    const passwordIsValid = isMaxLength(password, 7);
-    const emailsAreEqual = email === confirmEmail;
-    const passwordsAreEqual = password === confirmPassword;
-
-    const fieldsIsInvalid =
-      !emailIsInvalid ||
-      !passwordIsValid ||
-      (!isLogin && (!emailsAreEqual || !passwordsAreEqual))
-
-    if (fieldsIsInvalid) {
-      Alert.alert(STRINGS.invalidInput, STRINGS.pleaseCheck)
-      return;
-    }
     await onAuthenticate(credentials)
-
     if (!isAuthenticated) {
-      navigation.navigate(Screen.Login)
-    } else if (isAuthenticated) {
       navigation.navigate(Screen.Home)
+    } else {
+      navigation.navigate(Screen.Signup)
     }
-
-    if (!fieldsIsInvalid) return dispatch(resetFormFields())
   }
 
   return (

@@ -5,16 +5,28 @@ import { STRINGS } from '../constants/strings';
 export const validateErrors = (
   fields: FormFields,
   validationFunction: ValidationFunction,
-  dependencies: Record<string, any> = {}
-): Errors | undefined => {
-  const errors = Object.entries(fields).reduce(
-    (acc: Errors, [fieldName, fieldData]) => {
-      const error = validationFunction(fieldName, fieldData, dependencies);
-      return error ? {...acc, [fieldName]: error} : acc;
-    },
-    {}
-  );
-  return Object.keys(errors).length > 0 ? errors : undefined;
+  dependencies: {}
+) => {
+  const errors = Object.entries(fields).reduce((acc, [fieldName, fieldData]) => {
+    const error = validationFunction(fieldName, fieldData, dependencies);
+
+    return error ? { ...acc, [fieldName]: error } : acc;
+  }, {});
+
+  return Object.keys(errors).length > 0 && errors;
+};
+
+export const newValidateErrors = (
+  fields: { id: string; value: string },
+  validationFunction: ValidationFunction,
+  dependencies: Record<string, unknown> = {},
+) => {
+  const errors = Object.entries(fields).reduce((acc, [fieldName, fieldData]) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const error = validationFunction(fieldName, fieldData, dependencies);
+    return { ...acc, [fieldName]: error || '' };
+  }, {});
+  return Object.keys(errors).length > 0 && errors;
 };
 
 export const validateEmail = (email: string) => {
@@ -28,11 +40,11 @@ export const validateName = (name: string) => {
   return regex.test(String(name))
 };
 
-export const isMaxLength = (value: string, max: number) => {
-  return value.length <= max
+export const isOnlyLength = (value: string, max: number) => {
+  return value.length === max
 };
 
-export const validateSignUp = (field: FieldData, value: FieldData) => {
+export const validateSignUp = (field: string, value: string) => {
   let error;
   const email = field === 'email';
   const confirmEmail = field === 'confirmEmail';
@@ -56,7 +68,7 @@ export const validateSignUp = (field: FieldData, value: FieldData) => {
   if (password) {
     if (!value) {
       error = STRINGS.isRequired;
-    } else if (!isMaxLength(value as string,  7)) {
+    } else if (!isOnlyLength(value as string,  7)) {
       error = STRINGS.maxLengthPassword;
     }
   }
@@ -65,6 +77,7 @@ export const validateSignUp = (field: FieldData, value: FieldData) => {
       error = STRINGS.isRequired;
     }
   }
+
   return error;
 }
 
@@ -80,9 +93,10 @@ export const validateLogin = (field: FieldData, value: FieldData) => {
   if (field === 'password') {
     if (!value) {
       error = STRINGS.isRequired;
-    } else if (!isMaxLength(value as string,  7)) {
+    } else if (!isOnlyLength(value as string,  7)) {
       error = STRINGS.maxLengthPassword;
     }
   }
+
   return error;
 };

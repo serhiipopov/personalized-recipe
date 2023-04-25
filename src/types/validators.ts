@@ -2,7 +2,7 @@ export type FieldData = string | number;
 
 export type ValidationFunction = (
   fieldName: string,
-  fieldData: FieldData,
+  fieldData: string,
   dependencies: Record<string, any>
 ) => string | undefined;
 

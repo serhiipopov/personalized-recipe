@@ -11,16 +11,16 @@ import rootReducer from './reducers';
 
 export let store: Store<any>
 
-const persistConfig = {
-  key: 'root',
-  storage: AsyncStorage,
-}
-
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+// const persistConfig = {
+//   key: 'root',
+//   storage: AsyncStorage,
+// }
+//
+// const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 export const setupStore = (preloadedState?: any) => (
   configureStore({
-    reducer: persistedReducer,
+    reducer: rootReducer,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
       immutableCheck: false,
       serializableCheck: false,

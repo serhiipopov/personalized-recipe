@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import { useAppDispatch } from '../hooks/redux';
-import { createUserAsync } from '../store/auth/slice';
+import { createUserAsync, resetState } from '../store/auth/slice';
 
 import BaseLayout from '../components/BaseLayout/BaseLayout';
 import AuthContent from '../components/Auth/AuthContent';
@@ -12,6 +12,10 @@ import { Credentials } from '../types/auth';
 const SignupScreen = () => {
   const dispatch = useAppDispatch();
   const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false);
+
+  useEffect(() => {
+    dispatch(resetState());
+  }, [dispatch]);
 
   const signupHandler = async (credentials: Credentials) => {
     try {
@@ -26,7 +30,7 @@ const SignupScreen = () => {
 
   return (
     <BaseLayout>
-      <AuthContent onAuthenticate={signupHandler} />
+      <AuthContent isLogin={false} onAuthenticate={signupHandler} />
     </BaseLayout>
   )
 }

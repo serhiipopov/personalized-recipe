@@ -15,6 +15,7 @@ export enum STRINGS {
   inValidEmail = 'Invalid email format',
   checkEmail = 'Please, check for correctness email',
   checkPassword = 'Please, check for correctness password',
+  checkPlease = 'Please, check for correctness email or password',
   maxLengthPassword = 'The password must contain only 7 characters',
   isNumPassword = 'The password must contain only numbers',
 

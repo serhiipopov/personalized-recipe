@@ -1,7 +1,8 @@
 import { StyleSheet, Button, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { setFormFields } from '../../store/auth/slice';
+import { setFormFields} from '../../store/auth/slice';
 import Input from '../UI/Input';
+
 import { Credentials } from '../../types/auth';
 import { STRINGS } from '../../constants/strings';
 import { GlobalStyles } from '../../constants/styles';
@@ -15,8 +16,14 @@ interface AuthFormProps {
 const AuthForm = ({ isLogin, onSubmit, errors }: AuthFormProps) => {
   const dispatch = useAppDispatch();
   const { formFields } = useAppSelector(state => state.authReducer);
-
   const { email, password, confirmPassword, confirmEmail } = formFields;
+  const isDisabledCreateUser =
+    !email?.length ||
+    !password?.length ||
+    !confirmPassword?.length ||
+    !confirmEmail?.length;
+
+  const isDisabledLogin = !email?.length || !password?.length;
 
   const onUpdateValue = (id: string, value: string) => {
     dispatch(setFormFields({ id, value }))
@@ -32,7 +39,7 @@ const AuthForm = ({ isLogin, onSubmit, errors }: AuthFormProps) => {
   }
 
   return (
-    <View style={styles.containerForm}>
+    <View>
       <Input
         label='Email'
         style={styles.input}
@@ -89,6 +96,7 @@ const AuthForm = ({ isLogin, onSubmit, errors }: AuthFormProps) => {
         title={isLogin ? STRINGS.logIn : STRINGS.sigUp}
         color={GlobalStyles.colors.cyan800}
         onPress={submitHandler}
+        disabled={!isLogin ? isDisabledCreateUser : isDisabledLogin}
       />
     </View>
   )
@@ -97,7 +105,6 @@ const AuthForm = ({ isLogin, onSubmit, errors }: AuthFormProps) => {
 export default AuthForm;
 
 const styles = StyleSheet.create({
-  containerForm: {},
   input: {
     backgroundColor: GlobalStyles.colors.gray50,
     minHeight: 50,

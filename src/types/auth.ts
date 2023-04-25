@@ -1,5 +1,4 @@
 export interface AuthState {
-  token: string;
   isAuthenticated: boolean;
   formFields: Credentials;
   errors: Record<string, string>;
@@ -24,13 +23,4 @@ export interface Login {
   password: string;
 }
 
-export type FormFields = Credentials | Login
-
-export interface User {
-  email: string
-  password: string
-  confirmEmail: string;
-  confirmPassword: string;
-}
-
-
+export type FormFields = Credentials | Login;

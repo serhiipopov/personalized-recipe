@@ -8,7 +8,10 @@
     },
   "compilerOptions": {
     "types" : ["node", "lodash", "express"],
-    "isolatedModules": false
+    "isolatedModules": false,
+    "lib": [
+      "dom"
+    ]
   },
   "typeRoots": ["./node_modules/@types","./@types" ],
   "include": ["/**/*.ts", "/**/*.d.ts"]
