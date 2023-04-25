@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { store } from './src/store/store';
-import Tabs from './src/components/Tabs/Tabs';
 import { storageService } from './src/utils/storageService';
+import AppNavigation from './src/components/Navigation/AppNavigation';
 
 const App = () => {
 
@@ -15,7 +15,7 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <Tabs />
+      <AppNavigation />
     </Provider>
   )
 }

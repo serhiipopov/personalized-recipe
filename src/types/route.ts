@@ -18,6 +18,8 @@ export type RootStackParamList = {
   Login: undefined;
   Signup: undefined;
   BottomTabsOverview: undefined;
+  MyMeals: undefined;
+  AddMeal: undefined;
   RecipeDetails: { uri: string }
 };
 

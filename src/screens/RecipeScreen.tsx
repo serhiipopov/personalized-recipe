@@ -32,7 +32,6 @@ const RecipeScreen = ({ navigation }: RecipeScreenProps) => {
   if (isLoading) return <Spinner />
   if (error) return <Text>Error</Text>
 
-
   return (
     <BaseLayout>
       <SearchRecipe

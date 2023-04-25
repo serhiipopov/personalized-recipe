@@ -18,5 +18,6 @@ export enum STRINGS {
   checkPlease = 'Please, check for correctness email or password',
   maxLengthPassword = 'The password must contain only 7 characters',
   isNumPassword = 'The password must contain only numbers',
+  myMeals = 'My Meals',
 
 }

@@ -1,7 +1,8 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { useAppSelector } from '../../hooks/redux';
 import IngredientItem from './IngredientItem';
 import Spinner from '../UI/Spinner';
+import Error from '../UI/Error';
 
 interface IngredientListProps {
   onDeleteItem: (id: string) => void;
@@ -12,7 +13,7 @@ const IngredientList = ({ onDeleteItem, onToggleItem }: IngredientListProps) => 
   const { ingredients, isLoading, error } = useAppSelector(state => state.ingredientsReducer);
 
   if (isLoading) return <Spinner />
-  if (error) return <Text>Error</Text>
+  if (error) return <Error message='Error' />
 
   return (
     <View style={styles.container}>

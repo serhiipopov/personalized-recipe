@@ -1,5 +1,5 @@
 import { Button, StyleSheet, Text, View } from 'react-native';
-import { Strings } from '../../constants/strings';
+import { STRINGS } from '../../constants/strings';
 
 interface ErrorProps {
   message: string;
@@ -8,9 +8,9 @@ interface ErrorProps {
 const Error = ({ message }: ErrorProps) => {
   return (
     <View style={styles.wrapper}>
-      <Text>{Strings.anError}</Text>
+      <Text>{STRINGS.anError}</Text>
       <Text>{message}</Text>
-      <Button title={Strings.okay} />
+      <Button title={STRINGS.okay} />
     </View>
   )
 }

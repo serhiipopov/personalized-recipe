@@ -1,7 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 import { Pressable } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -9,20 +8,15 @@ import { logOutAsync } from '../../store/auth/slice';
 
 import HomeScreen from '../../screens/HomeScreen';
 import RecipeScreen from '../../screens/RecipeScreen';
-import BuyListScreen from '../../screens/BuyListScreen';
 import SettingsScreen from '../../screens/SettingsScreen';
-import RecipeDetailScreen from '../../screens/RecipeDetailScreen';
-import LoginScreen from '../../screens/LoginScreen';
-import SignupScreen from '../../screens/SignupScreen';
 
 import { RootStackParamList } from '../../types/route';
 import { Screen as ScreenEnum } from '../../constants/screen';
 import { GlobalStyles } from '../../constants/styles';
 
 const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const BottomTabsOverview = () => {
+const Tabs = () => {
   const dispatch = useAppDispatch();
   const { isAuthenticated } = useAppSelector(state => state.authReducer);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -80,60 +74,6 @@ const BottomTabsOverview = () => {
         />
       )}
     </Tab.Navigator>
-  )
-}
-
-const Tabs = () => {
-
-  return (
-    <>
-      <StatusBar style='auto' />
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName={ScreenEnum.Home}>
-          <Stack.Screen
-            name={ScreenEnum.BottomTabsOverview}
-            options={{ headerShown: false }}
-            component={BottomTabsOverview}
-          />
-          <Stack.Screen
-            options={{
-              headerStyle: { backgroundColor: GlobalStyles.colors.teal400 },
-              headerTintColor: GlobalStyles.colors.gray50,
-              presentation: 'modal'
-            }}
-            name={ScreenEnum.BuyList}
-            component={BuyListScreen}
-          />
-          <Stack.Screen
-            options={{
-              headerStyle: { backgroundColor: GlobalStyles.colors.gray50 },
-              headerTintColor: GlobalStyles.colors.gray900,
-              presentation: 'modal',
-              headerShown: false,
-              title: ScreenEnum.RecipeDetails,
-            }}
-            name={ScreenEnum.RecipeDetails}
-            component={RecipeDetailScreen}
-          />
-          <Stack.Screen
-            options={{
-              headerStyle: { backgroundColor: GlobalStyles.colors.teal400 },
-              headerTintColor: GlobalStyles.colors.gray50,
-            }}
-            name={ScreenEnum.Login}
-            component={LoginScreen}
-          />
-          <Stack.Screen
-            options={{
-              headerStyle: { backgroundColor: GlobalStyles.colors.teal400 },
-              headerTintColor: GlobalStyles.colors.gray50,
-            }}
-            name={ScreenEnum.Signup}
-            component={SignupScreen}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </>
   )
 }
 
