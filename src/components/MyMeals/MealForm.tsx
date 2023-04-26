@@ -21,7 +21,6 @@ const MealForm = ({
   }: MealFormProps) => {
   const { value, onChange } = useInput('');
 
-  console.log(mapUrl, 'map')
   return (
    <ScrollView style={styles.container}>
      <TextInput
