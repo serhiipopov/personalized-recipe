@@ -54,14 +54,16 @@ const Tabs = () => {
         name={ScreenEnum.Home}
         component={HomeScreen}
         options={{
-          tabBarIcon: ({ color, size }) => <Ionicons name='home-outline' color={color} size={size} />
+          tabBarIcon: ({ color, size }) =>
+            <Ionicons name='home-outline' color={color} size={size} />
         }}
       />
       <Tab.Screen
         name={ScreenEnum.Recipe}
         component={RecipeScreen}
         options={{
-          tabBarIcon: ({ color, size }) => <Ionicons name='reader-outline' color={color} size={size} />
+          tabBarIcon: ({ color, size }) =>
+            <Ionicons name='reader-outline' color={color} size={size} />
         }}
       />
       {isAuthenticated && (
@@ -69,7 +71,8 @@ const Tabs = () => {
           name={ScreenEnum.Settings}
           component={SettingsScreen}
           options={{
-            tabBarIcon: ({ color, size }) => <Ionicons name='settings-outline' color={color} size={size} />
+            tabBarIcon: ({ color, size }) =>
+              <Ionicons name='settings-outline' color={color} size={size} />
           }}
         />
       )}

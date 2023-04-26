@@ -1,8 +1,16 @@
 import { StyleSheet, TextInput, View } from 'react-native';
 import { useInput } from '../../hooks/useInput';
+import ImagePicker from '../UI/ImagePicker';
+
+import { STRINGS } from '../../constants/strings';
 import { GlobalStyles } from '../../constants/styles';
 
-const MealForm = () => {
+interface MealFormProps {
+  pressHandler: () => Promise<void>;
+  pickedImage: string | undefined;
+}
+
+const MealForm = ({ pressHandler, pickedImage }: MealFormProps) => {
   const { value, onChange } = useInput('');
 
   return (
@@ -14,6 +22,11 @@ const MealForm = () => {
        placeholder='Add my meal'
        maxLength={25}
      />
+     <ImagePicker
+       pickedImage={pickedImage}
+       nameButton={STRINGS.takePhoto}
+       pressHandler={pressHandler}
+     />
    </View>
   )
 }
@@ -22,12 +35,10 @@ export default MealForm;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     paddingVertical: '20%',
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   input: {
-    flex: 1,
     borderRadius: 16,
     borderWidth: 1,
     borderColor: GlobalStyles.colors.gray300,

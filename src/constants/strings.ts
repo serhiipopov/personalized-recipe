@@ -19,5 +19,9 @@ export enum STRINGS {
   maxLengthPassword = 'The password must contain only 7 characters',
   isNumPassword = 'The password must contain only numbers',
   myMeals = 'My Meals',
-
+  noMeals = 'No some meals yet',
+  takePhoto = 'Take photo',
+  insufficientPermissions = 'Insufficient Permissions!',
+  youNeedToGrant = 'You need to grant camera permissions to use this app',
+  noImageTakenYet = 'No image taken yet.',
 }

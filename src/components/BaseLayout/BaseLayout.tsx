@@ -1,13 +1,14 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleProp, StyleSheet, View } from 'react-native';
 import { GlobalStyles } from '../../constants/styles';
 
 interface BaseLayoutProps {
   children: React.ReactNode;
+  style?: StyleProp<any>;
 }
 
-const BaseLayout = ({ children }: BaseLayoutProps) => {
+const BaseLayout = ({ style, children }: BaseLayoutProps) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       {children}
     </View>
   )
@@ -19,8 +20,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: GlobalStyles.colors.gray50,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
     paddingHorizontal: 22,
   }
 })

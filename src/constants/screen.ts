@@ -1,12 +1,12 @@
 export enum Screen {
   Home = 'Home',
   Recipe = 'Recipe',
-  BuyList = 'Buy List',
+  BuyList = 'BuyList',
   Settings = 'Settings',
   BottomTabsOverview = 'BottomTabsOverview',
-  RecipeDetails = 'Recipe Details',
+  RecipeDetails = 'RecipeDetails',
   Login = 'Login',
   Signup = 'Signup',
-  MyMeals = 'My Meals',
-  AddMeal = 'Add new meal',
+  MyMeals = 'MyMeals',
+  AddMeal = 'AddMeal',
 }
