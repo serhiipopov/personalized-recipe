@@ -13,7 +13,7 @@ interface NotificationProps {
 
 const Notification = ({ notification, style }: NotificationProps) => {
   return (
-   <View style={styles.container}>
+   <View>
      <Text style={[styles.title, style]}>{notification}</Text>
    </View>
   )
@@ -22,9 +22,6 @@ const Notification = ({ notification, style }: NotificationProps) => {
 export default Notification;
 
 export const styles = StyleSheet.create({
-  container: {
-    paddingVertical: 30
-  },
   title: {
     color: GlobalStyles.colors.gray500,
     textAlign: 'center',

@@ -22,6 +22,7 @@ export enum STRINGS {
   noMeals = 'No some meals yet',
   takePhoto = 'Take photo',
   insufficientPermissions = 'Insufficient Permissions!',
-  youNeedToGrant = 'You need to grant camera permissions to use this app',
+  youNeedToGrantCamera = 'You need to grant camera permissions to use this app',
+  youNeedToGrantLocation = 'You need to grant location permissions to use this app',
   noImageTakenYet = 'No image taken yet.',
 }

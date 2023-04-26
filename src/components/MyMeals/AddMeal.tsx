@@ -1,35 +1,22 @@
 import { useState } from 'react';
-import {
-  launchCameraAsync,
-  PermissionStatus,
-  useCameraPermissions
-} from 'expo-image-picker';
-import { Alert } from 'react-native';
+import { launchCameraAsync, useCameraPermissions } from 'expo-image-picker';
+import { getCurrentPositionAsync, useForegroundPermissions } from 'expo-location';
+import { verifyPermission } from '../../utils/verifyPermission';
 import BaseLayout from '../BaseLayout/BaseLayout';
 import MealForm from './MealForm';
 import { STRINGS } from '../../constants/strings';
 
 const AddMeal = () => {
   const [pickedImage, setPickedImage] = useState<string | undefined>();
-  const [cameraPermissionInformation, requestPermission] = useCameraPermissions();
-
-  const verifyPermission = async (): Promise<boolean> => {
-    if (cameraPermissionInformation?.status === PermissionStatus.UNDETERMINED) {
-      const permissionResponse = await requestPermission();
-
-      return permissionResponse.granted;
-    }
-
-    if (cameraPermissionInformation?.status === PermissionStatus.DENIED) {
-      Alert.alert(STRINGS.insufficientPermissions, STRINGS.youNeedToGrant)
-      return false;
-    }
-
-    return true;
-  }
+  const [cameraPermissionInformation, requestPermissionCamera] = useCameraPermissions();
+  const [locationPermissionInformation, requestPermissionLocation] = useForegroundPermissions();
 
   const takePhotoHandler = async (): Promise<void> => {
-    const hasPermission = await  verifyPermission();
+    const hasPermission = await verifyPermission(
+      cameraPermissionInformation,
+      requestPermissionCamera,
+      STRINGS.youNeedToGrantCamera
+    );
     if (!hasPermission) return;
 
     const image = await launchCameraAsync({
@@ -41,9 +28,28 @@ const AddMeal = () => {
     setPickedImage(image.assets?.[0].uri);
   }
 
+  const getLocationHandler = async () => {
+    const hasPermission = await verifyPermission(
+      locationPermissionInformation,
+      requestPermissionLocation,
+      STRINGS.youNeedToGrantLocation
+    );
+    if (!hasPermission) return;
+
+    const location = await getCurrentPositionAsync()
+    console.log(location)
+  }
+  const pickOnMapHandler = async () => {
+  }
+
   return (
     <BaseLayout>
-      <MealForm pickedImage={pickedImage} pressHandler={takePhotoHandler} />
+      <MealForm
+        pickedImage={pickedImage}
+        pressHandler={takePhotoHandler}
+        locationHandler={getLocationHandler}
+        mapHandler={pickOnMapHandler}
+      />
     </BaseLayout>
   )
 }

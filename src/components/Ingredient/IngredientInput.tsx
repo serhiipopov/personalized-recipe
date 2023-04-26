@@ -1,37 +1,34 @@
-import { useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
+import { useInput } from '../../hooks/useInput';
 import { useAppDispatch } from '../../hooks/redux';
 import { addIngredient } from '../../store/ingredients/slice';
 import { GlobalStyles } from '../../constants/styles';
 import IconButton from '../UI/IconButton';
 
 const IngredientInput = () => {
-  const [input, setInput] = useState<string>('');
+  const { value, onChange, setValue } = useInput('');
   const dispatch = useAppDispatch();
 
-  const productInputHandler = (enteredProduct: string) => {
-    setInput(enteredProduct);
-  }
 
   const addProductHandler = () => {
     const newIngredient = {
-      ingredient: input,
+      ingredient: value,
       id: Date.now().toString(),
       completed: false,
     }
 
     dispatch(addIngredient(newIngredient));
-    setInput('');
+    setValue('');
   }
 
-  const countInput = input.length;
+  const isValue = value.length;
 
   return (
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        value={input}
-        onChangeText={productInputHandler}
+        value={value}
+        onChangeText={onChange}
         placeholder='Add product'
         maxLength={25}
       />
@@ -40,7 +37,7 @@ const IngredientInput = () => {
         size={42}
         color={GlobalStyles.colors.teal700}
         onPress={addProductHandler}
-        disabled={!countInput}
+        disabled={!isValue}
       />
     </View>
   )
