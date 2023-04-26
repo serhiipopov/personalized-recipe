@@ -1,19 +1,27 @@
 import { ScrollView, StyleSheet, TextInput } from 'react-native';
 import { useInput } from '../../hooks/useInput';
-import ImagePicker from '../UI/ImagePicker';
-import LocationPicker from './LocationPicker';
+import PickerWrapper from '../UI/PickerWrapper';
 import { GlobalStyles } from '../../constants/styles';
+import { STRINGS } from '../../constants/strings';
 
 interface MealFormProps {
   pressHandler: () => Promise<void>;
   locationHandler: () => Promise<void>;
   mapHandler: () => Promise<void>;
   pickedImage: string | undefined;
+  mapUrl: string;
 }
 
-const MealForm = ({ pressHandler, pickedImage, mapHandler, locationHandler }: MealFormProps) => {
+const MealForm = ({
+  pressHandler,
+  pickedImage,
+  mapHandler,
+  locationHandler,
+  mapUrl
+  }: MealFormProps) => {
   const { value, onChange } = useInput('');
 
+  console.log(mapUrl, 'map')
   return (
    <ScrollView style={styles.container}>
      <TextInput
@@ -23,13 +31,19 @@ const MealForm = ({ pressHandler, pickedImage, mapHandler, locationHandler }: Me
        placeholder='Add my meal'
        maxLength={25}
      />
-     <ImagePicker
-       pickedImage={pickedImage}
+     <PickerWrapper
+       image={pickedImage}
        pressHandler={pressHandler}
+       icon='camera-outline'
+       notification={STRINGS.noImageTakenYet}
      />
-     <LocationPicker
-       mapHandler={mapHandler}
-       locationHandler={locationHandler}
+     <PickerWrapper
+       image={mapUrl}
+       pressHandler={locationHandler}
+       icon='location-outline'
+       iconSecond='map-outline'
+       isIconBtnSecond={true}
+       notification={STRINGS.noLocationTakenYet}
      />
    </ScrollView>
   )

@@ -2,12 +2,15 @@ import { useState } from 'react';
 import { launchCameraAsync, useCameraPermissions } from 'expo-image-picker';
 import { getCurrentPositionAsync, useForegroundPermissions } from 'expo-location';
 import { verifyPermission } from '../../utils/verifyPermission';
+import { getMapPreview } from '../../utils/location';
+
 import BaseLayout from '../BaseLayout/BaseLayout';
 import MealForm from './MealForm';
 import { STRINGS } from '../../constants/strings';
 
 const AddMeal = () => {
   const [pickedImage, setPickedImage] = useState<string | undefined>();
+  const [pickedLocation, setPickedLocation] = useState({ lat: 0, lng: 0 });
   const [cameraPermissionInformation, requestPermissionCamera] = useCameraPermissions();
   const [locationPermissionInformation, requestPermissionLocation] = useForegroundPermissions();
 
@@ -37,8 +40,14 @@ const AddMeal = () => {
     if (!hasPermission) return;
 
     const location = await getCurrentPositionAsync()
-    console.log(location)
+    setPickedLocation({
+      lat: location.coords.latitude,
+      lng: location.coords.longitude
+    })
   }
+
+  const mapPreviewImageUrl = getMapPreview(pickedLocation?.lat, pickedLocation?.lng);
+
   const pickOnMapHandler = async () => {
   }
 
@@ -49,6 +58,7 @@ const AddMeal = () => {
         pressHandler={takePhotoHandler}
         locationHandler={getLocationHandler}
         mapHandler={pickOnMapHandler}
+        mapUrl={mapPreviewImageUrl}
       />
     </BaseLayout>
   )

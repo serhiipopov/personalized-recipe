@@ -25,4 +25,5 @@ export enum STRINGS {
   youNeedToGrantCamera = 'You need to grant camera permissions to use this app',
   youNeedToGrantLocation = 'You need to grant location permissions to use this app',
   noImageTakenYet = 'No image taken yet.',
+  noLocationTakenYet = 'No location taken yet.',
 }
