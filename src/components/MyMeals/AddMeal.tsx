@@ -1,18 +1,37 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native';
 import { launchCameraAsync, useCameraPermissions } from 'expo-image-picker';
 import { getCurrentPositionAsync, useForegroundPermissions } from 'expo-location';
+
 import { verifyPermission } from '../../utils/verifyPermission';
 import { getMapPreview } from '../../utils/location';
-
 import BaseLayout from '../BaseLayout/BaseLayout';
 import MealForm from './MealForm';
+
 import { STRINGS } from '../../constants/strings';
+import { Screen } from '../../constants/screen';
+import { AddMealRouteParams } from '../../types/route';
 
 const AddMeal = () => {
   const [pickedImage, setPickedImage] = useState<string | undefined>();
   const [pickedLocation, setPickedLocation] = useState({ lat: 0, lng: 0 });
   const [cameraPermissionInformation, requestPermissionCamera] = useCameraPermissions();
   const [locationPermissionInformation, requestPermissionLocation] = useForegroundPermissions();
+  const navigation = useNavigation();
+  const route = useRoute();
+  const isFocused = useIsFocused();
+
+  const params = route.params as AddMealRouteParams;
+
+  useEffect(() => {
+    if (isFocused && params) {
+      const mapPickedLocation = params && {
+        lat: params.pickedLat,
+        lng: params.pickedLng,
+      };
+      setPickedLocation(mapPickedLocation)
+    }
+  },[route, isFocused])
 
   const takePhotoHandler = async (): Promise<void> => {
     const hasPermission = await verifyPermission(
@@ -48,7 +67,8 @@ const AddMeal = () => {
 
   const mapPreviewImageUrl = getMapPreview(pickedLocation?.lat, pickedLocation?.lng);
 
-  const pickOnMapHandler = async () => {
+  const pickOnMapHandler = () => {
+    navigation.navigate(Screen.Map as never)
   }
 
   return (

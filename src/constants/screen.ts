@@ -9,4 +9,5 @@ export enum Screen {
   Signup = 'Signup',
   MyMeals = 'MyMeals',
   AddMeal = 'AddMeal',
+  Map = 'Map',
 }

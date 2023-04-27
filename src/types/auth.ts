@@ -11,13 +11,6 @@ export interface Credentials {
   confirmPassword: string;
 }
 
-export interface CredentialsInvalid {
-  email: boolean;
-  password: boolean;
-  confirmEmail: boolean;
-  confirmPassword: boolean;
-}
-
 export interface Login {
   email: string;
   password: string;

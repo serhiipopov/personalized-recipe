@@ -7,7 +7,7 @@ import { STRINGS } from '../../constants/strings';
 interface MealFormProps {
   pressHandler: () => Promise<void>;
   locationHandler: () => Promise<void>;
-  mapHandler: () => Promise<void>;
+  mapHandler: () => void;
   pickedImage: string | undefined;
   mapUrl: string;
 }
@@ -39,6 +39,7 @@ const MealForm = ({
      <PickerWrapper
        image={mapUrl}
        pressHandler={locationHandler}
+       pressHandlerSecond={mapHandler}
        icon='location-outline'
        iconSecond='map-outline'
        isIconBtnSecond={true}

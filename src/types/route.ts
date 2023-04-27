@@ -1,14 +1,10 @@
 import { Screen } from '../constants/screen';
 import { NavigationProp, RouteProp } from '@react-navigation/native';
 
-export type ScreenNames = [
-  Screen.Home,
-  Screen.Recipe,
-  Screen.BuyList,
-  Screen.Settings,
-  Screen.BottomTabsOverview,
-  Screen.RecipeDetails
-]
+export type AddMealRouteParams = {
+  pickedLat: number;
+  pickedLng: number;
+};
 
 export type RootStackParamList = {
   Home: undefined;
@@ -19,7 +15,8 @@ export type RootStackParamList = {
   Signup: undefined;
   BottomTabsOverview: undefined;
   MyMeals: undefined;
-  AddMeal: undefined;
+  AddMeal: AddMealRouteParams;
+  Map: undefined;
   RecipeDetails: { uri: string }
 };
 

@@ -6,7 +6,7 @@ import { GlobalStyles } from '../../constants/styles';
 interface PickerWrapperProps {
   image: string | undefined;
   pressHandler: () => Promise<void>;
-  pressHandlerSecond?: () => Promise<void>;
+  pressHandlerSecond?: () => void;
   notification: string;
   icon: string;
   iconSecond?: string;

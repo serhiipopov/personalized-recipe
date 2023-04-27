@@ -1,15 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import Tabs from './Tabs';
 import IconButton from '../UI/IconButton';
-
+import AddMeal from '../MyMeals/AddMeal';
 import BuyListScreen from '../../screens/BuyListScreen';
 import RecipeDetailScreen from '../../screens/RecipeDetailScreen';
 import LoginScreen from '../../screens/LoginScreen';
 import SignupScreen from '../../screens/SignupScreen';
 import MyMealsScreen from '../../screens/MyMealsScreen';
-import AddMeal from '../MyMeals/AddMeal';
+import MapScreen from '../../screens/MapScreen';
 
 import { RootStackParamList } from '../../types/route';
 import { Screen as ScreenEnum } from '../../constants/screen';
@@ -87,6 +88,10 @@ const AppNavigation = () => {
             }}
             name={ScreenEnum.AddMeal}
             component={AddMeal}
+          />
+          <Stack.Screen
+            name={ScreenEnum.Map}
+            component={MapScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>
