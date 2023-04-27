@@ -1,19 +1,17 @@
 import { AxiosResponse } from 'axios';
 import { instanceAuth, instanceRecipe } from './axios';
-import { AUTH_API_KEY } from '../constants/api';
 import { storageService } from '../utils/storageService';
-
-const env = process.env;
+import { EDAMAM_KEY, EDAMAM_ID, FIREBASE_API_KEY } from '../../config';
 
 export const RecipeAPI = {
   async getRecipe(query: string): Promise<AxiosResponse> {
-   return await instanceRecipe.get(`?type=public&q=${query}&?app_id=${env.EDAMAM_ID}&app_key=${env.EDAMAM_KEY}`)
+   return await instanceRecipe.get(`?type=public&q=${query}&?app_id=${EDAMAM_ID}&app_key=${EDAMAM_KEY}`)
   }
-}
+};
 
 export const AuthAPI = {
   async authenticate(mode: string, email: string, password: string) {
-    const response = await instanceAuth.post(`/accounts:${mode}?key=${AUTH_API_KEY}`, {
+    const response = await instanceAuth.post(`/accounts:${mode}?key=${FIREBASE_API_KEY}`, {
       email,
       password,
       returnSecureToken: true
@@ -36,4 +34,4 @@ export const AuthAPI = {
       return response
     }
   }
-}
+};
