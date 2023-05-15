@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, TextInput } from 'react-native';
-import { useInput } from '../../hooks/useInput';
 import PickerWrapper from '../UI/PickerWrapper';
+import PressButton from '../UI/PressButton';
 import { GlobalStyles } from '../../constants/styles';
 import { STRINGS } from '../../constants/strings';
 
@@ -8,8 +8,11 @@ interface MealFormProps {
   pressHandler: () => Promise<void>;
   locationHandler: () => Promise<void>;
   mapHandler: () => void;
+  saveHandler: () => void;
   pickedImage: string | undefined;
   mapUrl: string;
+  onChange: (value: string) => void;
+  value: string;
 }
 
 const MealForm = ({
@@ -17,10 +20,11 @@ const MealForm = ({
   pickedImage,
   mapHandler,
   locationHandler,
-  mapUrl
+  mapUrl,
+  saveHandler,
+  value,
+  onChange,
   }: MealFormProps) => {
-  const { value, onChange } = useInput('');
-
   return (
    <ScrollView style={styles.container}>
      <TextInput
@@ -45,6 +49,12 @@ const MealForm = ({
        isIconBtnSecond={true}
        notification={STRINGS.noLocationTakenYet}
      />
+     <PressButton
+       title={STRINGS.saveMeal}
+       style={styles.saveButton}
+       pressHandler={saveHandler}
+       styleTitle={styles.buttonTitle}
+     />
    </ScrollView>
   )
 }
@@ -64,5 +74,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     height: 50,
     fontSize: 18,
+  },
+  saveButton: {
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: GlobalStyles.colors.orange500,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    margin: 6,
+  },
+  buttonTitle: {
+    color: GlobalStyles.colors.orange500,
   }
 })

@@ -4,6 +4,7 @@ import PressButton from '../UI/PressButton';
 
 import { STRINGS } from '../../constants/strings';
 import { Screen } from '../../constants/screen';
+import { GlobalStyles } from '../../constants/styles';
 
 const HomeContainer = () => {
   const linkTo = useLinkTo();
@@ -12,8 +13,16 @@ const HomeContainer = () => {
 
   return (
     <View style={styles.container}>
-      <PressButton title={STRINGS.whatBuy} navigateHandler={onLintToByuList} />
-      <PressButton title={STRINGS.myMeals} navigateHandler={onLintToMyMeals} />
+      <PressButton
+        title={STRINGS.whatBuy}
+        pressHandler={onLintToByuList}
+        style={styles.pressButton}
+      />
+      <PressButton
+        title={STRINGS.myMeals}
+        pressHandler={onLintToMyMeals}
+        style={styles.pressButton}
+      />
     </View>
   )
 }
@@ -29,5 +38,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     gap: 16,
     marginBottom: 100,
+  },
+  pressButton: {
+    borderWidth: 1,
+    borderColor: GlobalStyles.colors.gray500,
+    backgroundColor: GlobalStyles.colors.gray200,
+    borderRadius: 18,
+    height: 130,
+    justifyContent: 'center',
+    opacity: 0.6
   }
 })

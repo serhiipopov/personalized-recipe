@@ -1,8 +1,9 @@
-import { FlatList, View } from 'react-native';
+import { StyleSheet, FlatList } from 'react-native';
 import { useAppSelector } from '../../hooks/redux';
 import Meal from './Meal';
 import Spinner from '../UI/Spinner';
 import Error from '../UI/Error';
+import BaseLayout from '../BaseLayout/BaseLayout';
 
 const MealsList = () => {
   const { meals, error, isLoading } = useAppSelector(state => state.mealsReducer);
@@ -11,17 +12,21 @@ const MealsList = () => {
   if (error) return <Error message='Error' />
 
   return (
-    <View>
+    <BaseLayout>
       <FlatList
+        style={styles.list}
         data={meals}
-        renderItem={({ item }) =>
-          <Meal meal={item} />
-        }
+        renderItem={ ({ item }) => <Meal meal={item} /> }
         keyExtractor={item => item.id}
-        showsVerticalScrollIndicator={false}
       />
-    </View>
+    </BaseLayout>
   )
 }
 
 export default MealsList;
+
+const styles = StyleSheet.create({
+  list: {
+    paddingVertical: 24,
+  }
+})

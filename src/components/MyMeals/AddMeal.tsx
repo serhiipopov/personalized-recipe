@@ -1,27 +1,38 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native';
 import { launchCameraAsync, useCameraPermissions } from 'expo-image-picker';
 import { getCurrentPositionAsync, useForegroundPermissions } from 'expo-location';
-
+import { useInput } from '../../hooks/useInput';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { addMeal, resetMeal, setPickedImage, setPickedLocation } from '../../store/meals/slice';
 import { verifyPermission } from '../../utils/verifyPermission';
-import { getMapPreview } from '../../utils/location';
+import { getAddress, getMapPreview } from '../../api/location';
+
 import BaseLayout from '../BaseLayout/BaseLayout';
 import MealForm from './MealForm';
 
-import { STRINGS } from '../../constants/strings';
+import { Meal } from '../../models/meal';
 import { Screen } from '../../constants/screen';
-import { AddMealRouteParams } from '../../types/route';
+import { AddMealRouteParams, StackNavigation } from '../../types/route';
+import { Location } from '../../types/meals';
+import { STRINGS } from '../../constants/strings';
 
 const AddMeal = () => {
-  const [pickedImage, setPickedImage] = useState<string | undefined>();
-  const [pickedLocation, setPickedLocation] = useState({ lat: 0, lng: 0 });
+  const { meal } = useAppSelector(state => state.mealsReducer);
   const [cameraPermissionInformation, requestPermissionCamera] = useCameraPermissions();
   const [locationPermissionInformation, requestPermissionLocation] = useForegroundPermissions();
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigation>();
+  const dispatch = useAppDispatch();
   const route = useRoute();
   const isFocused = useIsFocused();
-
+  const { name, pickedLocation, pickedImage } = meal;
+  const { value, onChange } = useInput(name);
+  const { lat, lng } = pickedLocation;
   const params = route.params as AddMealRouteParams;
+
+  const pickLocationHandler = useCallback((location: Location) => {
+    dispatch(setPickedLocation(location))
+  },[])
 
   useEffect(() => {
     if (isFocused && params) {
@@ -29,11 +40,22 @@ const AddMeal = () => {
         lat: params.pickedLat,
         lng: params.pickedLng,
       };
-      setPickedLocation(mapPickedLocation)
+      dispatch(setPickedLocation(mapPickedLocation))
     }
   },[route, isFocused])
 
-  const takePhotoHandler = async (): Promise<void> => {
+  useEffect(() => {
+    const handleLocation = async () => {
+      if (lat && lng) {
+        const address = await getAddress(lat, lng);
+        pickLocationHandler({ ...pickedLocation, address })
+      }
+    }
+
+    handleLocation();
+  },[pickLocationHandler, lng, lat])
+
+  const takePhotoHandler = useCallback(async (): Promise<void> => {
     const hasPermission = await verifyPermission(
       cameraPermissionInformation,
       requestPermissionCamera,
@@ -45,10 +67,11 @@ const AddMeal = () => {
       allowsEditing: true,
       aspect: [16, 9],
       quality: 0.5,
-    })
+    });
 
-    setPickedImage(image.assets?.[0].uri);
-  }
+    const imageUri = image.assets?.[0].uri;
+    dispatch(setPickedImage(imageUri || ''));
+  }, [cameraPermissionInformation, requestPermissionCamera]);
 
   const getLocationHandler = async () => {
     const hasPermission = await verifyPermission(
@@ -59,17 +82,27 @@ const AddMeal = () => {
     if (!hasPermission) return;
 
     const location = await getCurrentPositionAsync()
-    setPickedLocation({
+    dispatch(setPickedLocation({
       lat: location.coords.latitude,
       lng: location.coords.longitude
-    })
-  }
+    }))
+  };
 
-  const mapPreviewImageUrl = getMapPreview(pickedLocation?.lat, pickedLocation?.lng);
+  const mapPreviewImageUrl = useMemo(() => {
+    if (lat && lng) return getMapPreview(lat, lng);
+    return '';
+  }, [lat, lng]);
 
-  const pickOnMapHandler = () => {
-    navigation.navigate(Screen.Map as never)
-  }
+  const pickOnMapHandler = useCallback(() => {
+    navigation.navigate(Screen.Map as never);
+  }, [navigation]);
+
+  const saveMealHandler = useCallback(() => {
+    const mealData = new Meal(value, pickedImage || '', pickedLocation);
+    navigation.navigate(Screen.MyMeals);
+    dispatch(addMeal(mealData));
+    dispatch(resetMeal());
+  }, [value, pickedImage, lat, lng, navigation]);
 
   return (
     <BaseLayout>
@@ -79,6 +112,9 @@ const AddMeal = () => {
         locationHandler={getLocationHandler}
         mapHandler={pickOnMapHandler}
         mapUrl={mapPreviewImageUrl}
+        saveHandler={saveMealHandler}
+        onChange={onChange}
+        value={value}
       />
     </BaseLayout>
   )

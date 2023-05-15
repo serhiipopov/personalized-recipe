@@ -29,4 +29,5 @@ export enum STRINGS {
   pickedLocation = 'Picked Location',
   noLocationPicked = 'No location picked!',
   byTappingOnTheMapFirst = 'You have to pick a location (by tapping on the map) first!',
+  saveMeal = 'Save Meal'
 }

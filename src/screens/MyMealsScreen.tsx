@@ -6,7 +6,7 @@ import { STRINGS } from '../constants/strings';
 
 const MyMealsScreen = () => {
   const { meals } = useAppSelector(state => state.mealsReducer);
-  const isMeals = meals.length;
+  const isMeals = meals?.length;
 
   return (
     <BaseLayout>

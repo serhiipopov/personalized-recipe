@@ -1,32 +1,26 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { GlobalStyles } from '../../constants/styles';
+import {
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  Text,
+  View
+} from 'react-native';
 
 interface PressButtonProps {
   title: string;
-  navigateHandler: () => void;
+  pressHandler: () => void;
+  style?: StyleProp<any>;
+  styleTitle?: StyleProp<any>;
 }
 
-const pressStyles = (pressed: boolean) => {
-  return (
-    [
-      {
-        backgroundColor: pressed
-          ? GlobalStyles.colors.gray300
-          : GlobalStyles.colors.gray200,
-      },
-      styles.wrapperCustom,
-    ]
-  )
-}
-
-const PressButton = ({ navigateHandler, title }: PressButtonProps) => {
+const PressButton = ({ pressHandler, title, style, styleTitle }: PressButtonProps) => {
   return (
     <View style={styles.wrapperPress}>
       <Pressable
-        style={({ pressed }) => pressStyles(pressed)}
-        onPress={navigateHandler}
+        style={({ pressed}) => [style, pressed && styles.pressed] }
+        onPress={pressHandler}
       >
-        <Text style={styles.textPress}>{title}</Text>
+        <Text style={[styles.textPress, styleTitle]}>{title}</Text>
       </Pressable>
     </View>
   )
@@ -36,16 +30,13 @@ export default PressButton;
 
 const styles = StyleSheet.create({
   wrapperPress: {
-    flex: 2,
+    flex: 1,
   },
   textPress: {
     textAlign: 'center',
     textTransform: 'uppercase',
   },
-  wrapperCustom: {
-    borderRadius: 18,
-    height: 130,
-    justifyContent: 'center',
-    opacity: 0.6
-  },
+  pressed: {
+    opacity: 0.2,
+  }
 })

@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { instanceAuth, instanceRecipe } from './axios';
+import { instanceFirebase, instanceRecipe } from './axios';
 import { storageService } from '../utils/storageService';
 import { EDAMAM_KEY, EDAMAM_ID, FIREBASE_API_KEY } from '../../config';
 
@@ -11,7 +11,7 @@ export const RecipeAPI = {
 
 export const AuthAPI = {
   async authenticate(mode: string, email: string, password: string) {
-    const response = await instanceAuth.post(`/accounts:${mode}?key=${FIREBASE_API_KEY}`, {
+    const response = await instanceFirebase.post(`/accounts:${mode}?key=${FIREBASE_API_KEY}`, {
       email,
       password,
       returnSecureToken: true

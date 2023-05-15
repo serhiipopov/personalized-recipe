@@ -9,7 +9,6 @@ const IngredientInput = () => {
   const { value, onChange, setValue } = useInput('');
   const dispatch = useAppDispatch();
 
-
   const addProductHandler = () => {
     const newIngredient = {
       ingredient: value,
