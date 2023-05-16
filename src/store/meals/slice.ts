@@ -1,5 +1,6 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {IMeal, Location, MealsState} from '../../types/meals';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { FirebaseAPI } from '../../api/api';
+import { IMeal, Location, MealsState } from '../../types/meals';
 
 const initialState: MealsState = {
   meal: {
@@ -13,13 +14,44 @@ const initialState: MealsState = {
   error: '',
 }
 
+export const addMealAsync = createAsyncThunk(
+  'meal/addMealAsync',
+  async (meal: IMeal, { rejectWithValue }) => {
+    try {
+      return await FirebaseAPI.addMeal(meal);
+    } catch (error) {
+      console.error(error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const fetchAllMealsAsync = createAsyncThunk(
+  'meals/fetchAllMealsAsync',
+  async (_, { rejectWithValue }) => {
+    try {
+      const meals = await FirebaseAPI.getAllMeals();
+      const processedMeals: IMeal[] = [];
+
+        Object.keys(meals || []).forEach((key) => {
+          const meal = meals[key];
+          if (meal !== null) {
+            processedMeals.push(meal);
+          }
+        });
+
+        return processedMeals;
+    } catch (error) {
+      console.error(error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
 export const mealsSlice = createSlice({
   name: 'meals',
   initialState,
   reducers: {
-    addMeal(state, action: PayloadAction<IMeal>) {
-      state.meals = [...state.meals, { ...action.payload }]
-    },
     resetMeal(state) {
       state.meal = initialState.meal;
     },
@@ -38,11 +70,28 @@ export const mealsSlice = createSlice({
     setPickedLocation: (state, action: PayloadAction<Location>) => {
       state.meal.pickedLocation = action.payload;
     }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(addMealAsync.fulfilled.type, (state, action: PayloadAction<IMeal>) => {
+        state.meals = [...state.meals, {...action.payload}];
+      })
+    builder
+      .addCase(fetchAllMealsAsync.fulfilled.type, (state, action: PayloadAction<IMeal[]>) => {
+        state.meals = action.payload;
+        state.isLoading = false;
+        state.error = '';
+      })
+      .addCase(fetchAllMealsAsync.rejected.type, (state, action: PayloadAction<string>) => {
+        state.error = action.payload;
+      })
+      .addCase(fetchAllMealsAsync.pending.type, (state, action) => {
+        state.error = '';
+      })
   }
 });
 
 export const {
-  addMeal,
   setPickedLocation,
   setPickedImage,
   resetMeal

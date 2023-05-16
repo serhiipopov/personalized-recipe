@@ -4,7 +4,7 @@ import { launchCameraAsync, useCameraPermissions } from 'expo-image-picker';
 import { getCurrentPositionAsync, useForegroundPermissions } from 'expo-location';
 import { useInput } from '../../hooks/useInput';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { addMeal, resetMeal, setPickedImage, setPickedLocation } from '../../store/meals/slice';
+import { addMealAsync, resetMeal, setPickedImage, setPickedLocation } from '../../store/meals/slice';
 import { verifyPermission } from '../../utils/verifyPermission';
 import { getAddress, getMapPreview } from '../../api/location';
 
@@ -100,7 +100,7 @@ const AddMeal = () => {
   const saveMealHandler = useCallback(() => {
     const mealData = new Meal(value, pickedImage || '', pickedLocation);
     navigation.navigate(Screen.MyMeals);
-    dispatch(addMeal(mealData));
+    dispatch(addMealAsync(mealData));
     dispatch(resetMeal());
   }, [value, pickedImage, lat, lng, navigation]);
 

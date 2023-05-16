@@ -1,7 +1,12 @@
 import { AxiosResponse } from 'axios';
-import { instanceFirebase, instanceRecipe } from './axios';
+import { instanceAuth, instanceDB, instanceRecipe } from './axios';
 import { storageService } from '../utils/storageService';
-import { EDAMAM_KEY, EDAMAM_ID, FIREBASE_API_KEY } from '../../config';
+import {
+  EDAMAM_KEY,
+  EDAMAM_ID,
+  FIREBASE_API_KEY,
+} from '../../config';
+import { IMeal } from '../types/meals';
 
 export const RecipeAPI = {
   async getRecipe(query: string): Promise<AxiosResponse> {
@@ -11,7 +16,7 @@ export const RecipeAPI = {
 
 export const AuthAPI = {
   async authenticate(mode: string, email: string, password: string) {
-    const response = await instanceFirebase.post(`/accounts:${mode}?key=${FIREBASE_API_KEY}`, {
+    const response = await instanceAuth.post(`/accounts:${mode}?key=${FIREBASE_API_KEY}`, {
       email,
       password,
       returnSecureToken: true
@@ -35,3 +40,14 @@ export const AuthAPI = {
     }
   }
 };
+
+export const FirebaseAPI = {
+  async addMeal(newMeal: IMeal) {
+    const response = await instanceDB.post(`/meals.json`, newMeal)
+    return response.data
+  },
+  async getAllMeals() {
+    const response = await instanceDB.get(`/meals.json`)
+    return response.data;
+  }
+}

@@ -10,6 +10,7 @@ export const getMapPreview = (lat: number, lng: number) => {
 export const getAddress = async (lat: number, lng: number): Promise<string> => {
   const url = `${GOOGLE_URL}/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_API_KEY}`;
   const response = await axios.get(url);
+
   if (response.status < 200 || response.status >= 300) {
     throw new Error('Failed to fetch address!')
   }
