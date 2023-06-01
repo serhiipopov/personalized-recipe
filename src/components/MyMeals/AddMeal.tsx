@@ -2,9 +2,15 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native';
 import { launchCameraAsync, useCameraPermissions } from 'expo-image-picker';
 import { getCurrentPositionAsync, useForegroundPermissions } from 'expo-location';
-import { useInput } from '../../hooks/useInput';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { addMealAsync, resetMeal, setPickedImage, setPickedLocation } from '../../store/meals/slice';
+import {
+  addMealAsync,
+  fetchAllMealsAsync,
+  resetMeal,
+  setInput,
+  setPickedImage,
+  setPickedLocation
+} from '../../store/meals/slice';
 import { verifyPermission } from '../../utils/verifyPermission';
 import { getAddress, getMapPreview } from '../../api/location';
 
@@ -25,14 +31,18 @@ const AddMeal = () => {
   const dispatch = useAppDispatch();
   const route = useRoute();
   const isFocused = useIsFocused();
+
   const { name, pickedLocation, pickedImage } = meal;
-  const { value, onChange } = useInput(name);
   const { lat, lng } = pickedLocation;
   const params = route.params as AddMealRouteParams;
 
   const pickLocationHandler = useCallback((location: Location) => {
     dispatch(setPickedLocation(location))
-  },[])
+  },[]);
+
+  const enteredValueHandler = (enteredValue: string) => {
+    dispatch(setInput(enteredValue))
+  };
 
   useEffect(() => {
     if (isFocused && params) {
@@ -98,11 +108,14 @@ const AddMeal = () => {
   }, [navigation]);
 
   const saveMealHandler = useCallback(() => {
-    const mealData = new Meal(value, pickedImage || '', pickedLocation);
+    const mealData = new Meal(name, pickedImage || '', pickedLocation);
+    dispatch(addMealAsync(mealData))
+      .then(() => {
+        dispatch(fetchAllMealsAsync())
+      });
     navigation.navigate(Screen.MyMeals);
-    dispatch(addMealAsync(mealData));
     dispatch(resetMeal());
-  }, [value, pickedImage, lat, lng, navigation]);
+  },[name, pickedImage, pickedLocation]);
 
   return (
     <BaseLayout>
@@ -113,8 +126,8 @@ const AddMeal = () => {
         mapHandler={pickOnMapHandler}
         mapUrl={mapPreviewImageUrl}
         saveHandler={saveMealHandler}
-        onChange={onChange}
-        value={value}
+        onChange={enteredValueHandler}
+        value={name}
       />
     </BaseLayout>
   )

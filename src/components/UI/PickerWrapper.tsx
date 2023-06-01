@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import IconButton from './IconButton';
 import Notification from './Notification';
@@ -51,7 +52,7 @@ const PickerWrapper = ({
   )
 }
 
-export default PickerWrapper;
+export default memo(PickerWrapper);
 
 const styles = StyleSheet.create({
   wrapper: {

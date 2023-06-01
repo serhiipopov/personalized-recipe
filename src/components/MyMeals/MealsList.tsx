@@ -1,21 +1,28 @@
-import { useEffect } from 'react';
+import { memo } from 'react';
 import { StyleSheet, FlatList } from 'react-native';
-import { fetchAllMealsAsync } from '../../store/meals/slice';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import Meal from './Meal';
 import Spinner from '../UI/Spinner';
 import Error from '../UI/Error';
 import BaseLayout from '../BaseLayout/BaseLayout';
+import { IMeal } from '../../types/meals';
 
+interface MealsListProps {
+  meals: IMeal[];
+  isLoading: boolean;
+  error: string;
+  showButtonId: string | null;
+  toggleHandler: (mealId: string) => void;
+  deleteHandler: (mealId: string) => void;
+}
 
-const MealsList = () => {
-  const { meals, error, isLoading } = useAppSelector(state => state.mealsReducer);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(fetchAllMealsAsync())
-  },[]);
-
+const MealsList = memo(({
+  meals,
+  isLoading,
+  toggleHandler,
+  deleteHandler,
+  showButtonId,
+  error
+  }: MealsListProps) => {
   if (isLoading) return <Spinner />
   if (error) return <Error message='Error' />
 
@@ -24,12 +31,19 @@ const MealsList = () => {
       <FlatList
         style={styles.list}
         data={meals}
-        renderItem={ ({ item }) => <Meal meal={item} /> }
-        keyExtractor={item => item.id}
+        renderItem={({ item }) => (
+          <Meal
+            meal={item}
+            deleteHandler={() => deleteHandler(item.id)}
+            toggleHandler={() => toggleHandler(item.id)}
+            showButton={showButtonId === item.id}
+          />
+        )}
+        keyExtractor={item => item.name}
       />
     </BaseLayout>
   )
-}
+})
 
 export default MealsList;
 

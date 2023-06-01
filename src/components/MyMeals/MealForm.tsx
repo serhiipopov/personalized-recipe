@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { ScrollView, StyleSheet, TextInput } from 'react-native';
 import PickerWrapper from '../UI/PickerWrapper';
 import PressButton from '../UI/PressButton';
@@ -15,7 +16,7 @@ interface MealFormProps {
   value: string;
 }
 
-const MealForm = ({
+const MealForm = memo(({
   pressHandler,
   pickedImage,
   mapHandler,
@@ -57,7 +58,7 @@ const MealForm = ({
      />
    </ScrollView>
   )
-}
+})
 
 export default MealForm;
 

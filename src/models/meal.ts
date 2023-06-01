@@ -7,7 +7,7 @@ export class Meal implements IMeal {
   pickedLocation: Location;
 
   constructor(name: string, pickedImage: string, pickedLocation: Location) {
-    this.id = new Date().toString();
+    this.id = Date.now().toString();
     this.name = name;
     this.pickedImage = pickedImage;
     this.pickedLocation = {

@@ -48,6 +48,10 @@ export const FirebaseAPI = {
   },
   async getAllMeals() {
     const response = await instanceDB.get(`/meals.json`)
-    return response.data;
+    return response.data
+  },
+  async removeMeal(mealId: string) {
+    const response = await instanceDB.delete(`/meals/${mealId}.json`)
+    return response.data
   }
 }

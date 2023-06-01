@@ -26,21 +26,28 @@ export const addMealAsync = createAsyncThunk(
   }
 );
 
+export const deleteMealAsync = createAsyncThunk(
+  'delete/deleteMealAsync',
+  async (mealId: string, {  rejectWithValue }) => {
+    try {
+      return await FirebaseAPI.removeMeal(mealId);
+    } catch (error) {
+      console.error(error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
 export const fetchAllMealsAsync = createAsyncThunk(
   'meals/fetchAllMealsAsync',
   async (_, { rejectWithValue }) => {
     try {
-      const meals = await FirebaseAPI.getAllMeals();
-      const processedMeals: IMeal[] = [];
+      const response = await FirebaseAPI.getAllMeals();
+      if (response === null) return [];
+      const mealKeys = Object.keys(response);
 
-        Object.keys(meals || []).forEach((key) => {
-          const meal = meals[key];
-          if (meal !== null) {
-            processedMeals.push(meal);
-          }
-        });
+      return mealKeys.map(key => ({ ...response[key], id: key }));
 
-        return processedMeals;
     } catch (error) {
       console.error(error);
       return rejectWithValue(error);
@@ -53,16 +60,16 @@ export const mealsSlice = createSlice({
   initialState,
   reducers: {
     resetMeal(state) {
-      state.meal = initialState.meal;
-    },
-    removeMeal(state, action: PayloadAction<string>) {
-      state.meals = state.meals.filter((meal) => meal.id !== action.payload);
+      state.meal = initialState.meal
     },
     updateMeal(state, action: PayloadAction<IMeal>) {
       const index = state.meals.findIndex((meal) => meal.id === action.payload.id);
       if (index !== -1) {
         state.meals[index] = action.payload;
       }
+    },
+    setInput(state, action: PayloadAction<string>) {
+      state.meal.name = action.payload
     },
     setPickedImage: (state, action: PayloadAction<string>) => {
       state.meal.pickedImage = action.payload;
@@ -74,27 +81,37 @@ export const mealsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(addMealAsync.fulfilled.type, (state, action: PayloadAction<IMeal>) => {
-        state.meals = [...state.meals, {...action.payload}];
+        state.meals = [...state.meals, { ...action.payload }];
       })
     builder
       .addCase(fetchAllMealsAsync.fulfilled.type, (state, action: PayloadAction<IMeal[]>) => {
-        state.meals = action.payload;
-        state.isLoading = false;
-        state.error = '';
-      })
+      state.meals = action.payload;
+      state.isLoading = false;
+      state.error = '';
+    })
       .addCase(fetchAllMealsAsync.rejected.type, (state, action: PayloadAction<string>) => {
         state.error = action.payload;
+        state.isLoading = false;
       })
       .addCase(fetchAllMealsAsync.pending.type, (state, action) => {
         state.error = '';
+        state.isLoading = true;
       })
+    builder
+      .addCase(deleteMealAsync.fulfilled, (state, action: PayloadAction<string>) => {
+        const mealId = action.payload;
+        state.meals = state.meals.filter((meal) => meal.id !== mealId);
+        state.error = '';
+        state.isLoading = false;
+      });
   }
-});
+})
 
 export const {
   setPickedLocation,
   setPickedImage,
-  resetMeal
+  setInput,
+  resetMeal,
 } = mealsSlice.actions;
 
 export default mealsSlice.reducer;
