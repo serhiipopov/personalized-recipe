@@ -16,12 +16,14 @@ import { GlobalStyles } from '../../constants/styles';
 
 const Tab = createBottomTabNavigator();
 
-const Tabs = () => {
+const Tabs = ({ userId }: { userId: string }) => {
   const dispatch = useAppDispatch();
   const { isAuthenticated } = useAppSelector(state => state.authReducer);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const logOutHandler = () => dispatch(logOutAsync());
+  const logOutHandler = () => {
+    dispatch(logOutAsync());
+  }
 
   return (
     <Tab.Navigator
@@ -33,16 +35,14 @@ const Tabs = () => {
         tabBarInactiveTintColor: GlobalStyles.colors.cyan100,
         headerRight: () => (
           <>
-            {!isAuthenticated ?
-              (
-                <Pressable style={{ marginRight: 30 }} onPress={() => navigation.navigate(ScreenEnum.Login)}>
-                  <Ionicons name='person-outline' color={GlobalStyles.colors.gray50} size={26} />
-                </Pressable>
-              )
-              :
-              (
+            {userId? (
                 <Pressable style={{ marginRight: 30 }} onPress={logOutHandler}>
                   <Ionicons name='exit-outline' color={GlobalStyles.colors.gray50} size={26} />
+                </Pressable>
+              )
+              : (
+                <Pressable style={{ marginRight: 30 }} onPress={() => navigation.navigate(ScreenEnum.Login)}>
+                  <Ionicons name='person-outline' color={GlobalStyles.colors.gray50} size={26} />
                 </Pressable>
               )
             }

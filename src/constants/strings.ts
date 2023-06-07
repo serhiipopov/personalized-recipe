@@ -13,6 +13,8 @@ export enum STRINGS {
   couldNotCreateUser = 'Could not create user, please check your input and try again later.',
   isRequired = 'This field is required',
   inValidEmail = 'Invalid email format',
+  emailsDoNotMatch = 'Emails do not match',
+  passwordsDoNotMatch = 'Passwords do not match',
   checkEmail = 'Please, check for correctness email',
   checkPassword = 'Please, check for correctness password',
   checkPlease = 'Please, check for correctness email or password',

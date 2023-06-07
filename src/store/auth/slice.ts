@@ -1,8 +1,13 @@
+import axios from 'axios';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AuthState, Credentials, Login } from '../../types/auth';
-import { AuthAPI } from '../../api/api';
+import { AuthAPI } from '../../api/services/auth-service';
 import { validateErrors, validateLogin, validateSignUp } from '../../utils/validatiors';
-import { storageService } from '../../utils/storageService';
+import {
+  deleteFromStorage,
+  deleteTokenFromStorage,
+  getTokenFromStorage,
+} from '../../utils/secureStore';
 
 export const initialState: AuthState = {
   isAuthenticated: false,
@@ -20,44 +25,60 @@ export const createUserAsync = createAsyncThunk(
   async (credentials: Credentials, { rejectWithValue }) => {
     try {
       const { email, password, confirmEmail, confirmPassword } = credentials;
-      const errors = validateErrors({ email, password, confirmEmail, confirmPassword }, validateSignUp, {})
+
+      const errors = validateErrors({
+        email,
+        password,
+        confirmEmail,
+        confirmPassword
+      }, validateSignUp, credentials);
       if (errors) {
         return rejectWithValue({ errors });
       }
 
-      return await AuthAPI.createUser(email, password)
+      return await AuthAPI.createUser(email, password);
 
     } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error();
+      }
       return rejectWithValue(error)
     }
   }
-)
+);
 
 export const loginAsync = createAsyncThunk(
   'login/loginAsync',
-  async ({ email, password }: Login, { rejectWithValue }) => {
+  async (login: Login, { rejectWithValue }) => {
+   const { email, password } = login
     try {
-      const errors = validateErrors({ email, password }, validateLogin, {})
+      const errors = validateErrors({ email, password }, validateLogin, {});
       if (errors) {
         return rejectWithValue({ errors });
       }
 
       return await AuthAPI.login(email, password)
 
-    } catch (error) {
-      return rejectWithValue(error)
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.status === 400) {
+          throw new Error();
+        }
+        return rejectWithValue(error)
+      }
     }
   }
-)
+);
 
 export const logOutAsync = createAsyncThunk(
   'logOut/logOutAsync',
   async (_, { rejectWithValue }) => {
 
     try {
-      const token = await storageService.getStateFromStorage('token')
-      if (token) {
-        await storageService.removeKey('token')
+      const { accessToken } = await getTokenFromStorage()
+      if (accessToken) {
+        await deleteTokenFromStorage()
+        await deleteFromStorage('localId')
       }
 
       return null
@@ -74,29 +95,31 @@ export const authSlice = createSlice({
     resetState: () => initialState,
     setFormFields: (state, action: PayloadAction<{ id: string, value: string }>) => {
       const { id, value } = action.payload
-      state.formFields = { ...state.formFields, [id]: value }
+      state.formFields = {...state.formFields, [id]: value}
     }
   },
   extraReducers: (builder) => {
     builder
       .addCase(createUserAsync.fulfilled.type, (state, action: PayloadAction<AuthState>) => {
-        state.formFields = { ...action.payload.formFields };
-        state.isAuthenticated = true;
+        state.formFields = {...action.payload.formFields};
+        state.errors = {};
       })
       .addCase(createUserAsync.rejected.type, (state, action: PayloadAction<AuthState>) => {
-        state.errors = action.payload.errors
+        state.errors = action.payload.errors;
       })
     builder
       .addCase(loginAsync.fulfilled.type, (state, action: PayloadAction<AuthState>) => {
         state.isAuthenticated = true;
+        state.errors = {};
       })
       .addCase(loginAsync.rejected.type, (state, action: PayloadAction<AuthState>) => {
-        state.errors = action.payload.errors
-        state.isAuthenticated = false
+        state.errors = action.payload.errors;
+        state.isAuthenticated = false;
       })
     builder
       .addCase(logOutAsync.fulfilled.type, (state) => {
-        state.isAuthenticated = false
+        state.isAuthenticated = false;
+        state.errors = {};
       })
   }
 })

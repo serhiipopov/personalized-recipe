@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAppSelector } from '../../hooks/redux';
 import AuthForm from './AuthForm';
+import { isEmptyObject } from '../../utils/validatiors';
 
 import { Credentials } from '../../types/auth';
 import { RootStackParamList } from '../../types/route';
@@ -18,6 +19,7 @@ interface AuthContentProps {
 const AuthContent = ({ onAuthenticate, isLogin }: AuthContentProps) => {
   const { errors, isAuthenticated } = useAppSelector(state => state.authReducer);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const isEmpty = isEmptyObject(errors);
 
   const switchAuthModeHandler = () => {
     if (isLogin) {
@@ -28,11 +30,15 @@ const AuthContent = ({ onAuthenticate, isLogin }: AuthContentProps) => {
   }
 
   const submitHandler = async (credentials: Credentials) => {
+    const isNavigateToLogin = isEmpty && !isAuthenticated && !isLogin;
+    const isNavigateToHome = isEmpty && !isAuthenticated && isLogin;
     await onAuthenticate(credentials)
-    if (!isAuthenticated) {
-      navigation.navigate(Screen.Home)
-    } else {
-      navigation.navigate(Screen.Signup)
+
+    if (!isEmpty) return;
+    if (isNavigateToLogin) {
+      navigation.navigate(Screen.Login);
+    } else if (isNavigateToHome) {
+      navigation.navigate(Screen.Home);
     }
   }
 

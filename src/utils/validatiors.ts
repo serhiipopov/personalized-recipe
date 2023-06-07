@@ -1,32 +1,17 @@
-import { Errors, FieldData, ValidationFunction } from '../types/validators';
-import { FormFields } from '../types/auth';
+import { Credentials, FormFields } from '../types/auth';
 import { STRINGS } from '../constants/strings';
 
-export const validateErrors = (
+export const validateErrors = <T extends Record<string, any>>(
   fields: FormFields,
-  validationFunction: ValidationFunction,
-  dependencies: {}
+  validationFunction: (field: string, value: string, formFields: T) => string | undefined,
+  dependencies: T,
 ) => {
   const errors = Object.entries(fields).reduce((acc, [fieldName, fieldData]) => {
     const error = validationFunction(fieldName, fieldData, dependencies);
-
     return error ? { ...acc, [fieldName]: error } : acc;
   }, {});
 
-  return Object.keys(errors).length > 0 && errors;
-};
-
-export const newValidateErrors = (
-  fields: { id: string; value: string },
-  validationFunction: ValidationFunction,
-  dependencies: Record<string, unknown> = {},
-) => {
-  const errors = Object.entries(fields).reduce((acc, [fieldName, fieldData]) => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    const error = validationFunction(fieldName, fieldData, dependencies);
-    return { ...acc, [fieldName]: error || '' };
-  }, {});
-  return Object.keys(errors).length > 0 && errors;
+  return Object.keys(errors).length > 0 ? errors : undefined;
 };
 
 export const validateEmail = (email: string) => {
@@ -35,16 +20,13 @@ export const validateEmail = (email: string) => {
   return regStr.test(String(email).toLowerCase());
 };
 
-export const validateName = (name: string) => {
-  const regex = /^([A-Za-z])+$/;
-  return regex.test(String(name))
+export const isOnlyLength = (value: string, max: number) => value.length === max;
+
+export const isEmptyObject = (obj: object) => {
+  return !Object.keys(obj).length;
 };
 
-export const isOnlyLength = (value: string, max: number) => {
-  return value.length === max
-};
-
-export const validateSignUp = (field: string, value: string) => {
+export const validateSignUp = (field: string, value: string, formFields: Credentials ) => {
   let error;
   const email = field === 'email';
   const confirmEmail = field === 'confirmEmail';
@@ -56,6 +38,8 @@ export const validateSignUp = (field: string, value: string) => {
       error = STRINGS.isRequired;
     } else if (!validateEmail(value as string)) {
       error = STRINGS.inValidEmail;
+    } else if (confirmEmail && value !== formFields.email) {
+      error = STRINGS.emailsDoNotMatch;
     }
   }
   if (confirmEmail) {
@@ -63,25 +47,31 @@ export const validateSignUp = (field: string, value: string) => {
       error = STRINGS.isRequired;
     } else if (!validateEmail(value as string)) {
       error = STRINGS.inValidEmail;
+    } else if (formFields.email && value !== formFields.email) {
+      error = STRINGS.emailsDoNotMatch;
     }
   }
   if (password) {
     if (!value) {
       error = STRINGS.isRequired;
-    } else if (!isOnlyLength(value as string,  7)) {
+    } else if (!isOnlyLength(value as string, 7)) {
       error = STRINGS.maxLengthPassword;
+    } else if (confirmPassword && value !== formFields.password) {
+      error = STRINGS.passwordsDoNotMatch;
     }
   }
   if (confirmPassword) {
     if (!value) {
       error = STRINGS.isRequired;
+    } else if (formFields.password && value !== formFields.password) {
+      error = STRINGS.passwordsDoNotMatch;
     }
   }
 
   return error;
 }
 
-export const validateLogin = (field: FieldData, value: FieldData) => {
+export const validateLogin = (field: string, value: string) => {
   let error;
   if (field === 'email') {
       if (!value) {

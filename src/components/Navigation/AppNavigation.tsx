@@ -1,6 +1,9 @@
+import { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { getProfileAsync } from '../../store/account/slice';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 
 import Tabs from './Tabs';
 import IconButton from '../UI/IconButton';
@@ -19,6 +22,14 @@ import { GlobalStyles } from '../../constants/styles';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const AppNavigation = () => {
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector(state => state.profileReducer);
+  const userId = user?.localId;
+
+  useEffect(() => {
+    dispatch(getProfileAsync());
+  },[])
+
   return (
     <>
       <StatusBar style='auto' />
@@ -27,8 +38,9 @@ const AppNavigation = () => {
           <Stack.Screen
             name={ScreenEnum.BottomTabsOverview}
             options={{ headerShown: false }}
-            component={Tabs}
-          />
+          >
+            {() => <Tabs userId={userId} />}
+          </Stack.Screen>
           <Stack.Screen
             options={{
               headerStyle: { backgroundColor: GlobalStyles.colors.teal400 },

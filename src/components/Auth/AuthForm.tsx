@@ -1,4 +1,5 @@
-import { StyleSheet, Button, View } from 'react-native';
+import { memo } from 'react';
+import { StyleSheet, Button, View, GestureResponderEvent } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setFormFields} from '../../store/auth/slice';
 import Input from '../UI/Input';
@@ -13,7 +14,7 @@ interface AuthFormProps {
   errors: Record<string, string>;
 }
 
-const AuthForm = ({ isLogin, onSubmit, errors }: AuthFormProps) => {
+const AuthForm = memo(({ isLogin, onSubmit, errors }: AuthFormProps) => {
   const dispatch = useAppDispatch();
   const { formFields } = useAppSelector(state => state.authReducer);
   const { email, password, confirmPassword, confirmEmail } = formFields;
@@ -29,7 +30,8 @@ const AuthForm = ({ isLogin, onSubmit, errors }: AuthFormProps) => {
     dispatch(setFormFields({ id, value }))
   }
 
-  const submitHandler = () => {
+  const submitHandler = (e: GestureResponderEvent) => {
+    e.preventDefault();
     onSubmit({
       email,
       password,
@@ -100,7 +102,7 @@ const AuthForm = ({ isLogin, onSubmit, errors }: AuthFormProps) => {
       />
     </View>
   )
-}
+})
 
 export default AuthForm;
 

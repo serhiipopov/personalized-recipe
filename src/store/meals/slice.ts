@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { FirebaseAPI } from '../../api/api';
+import { FirebaseAPI } from '../../api/services/firebase-service';
 import { IMeal, Location, MealsState } from '../../types/meals';
+
 
 const initialState: MealsState = {
   meal: {

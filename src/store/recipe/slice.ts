@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RecipeAPI } from '../../api/api';
+import { RecipeAPI } from '../../api/services/recipe-service';
 import { Recipe, RecipesState } from '../../types/recipe';
 
 const initialState: RecipesState = {

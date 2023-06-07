@@ -17,12 +17,11 @@ const LoginScreen = () => {
     dispatch(resetState());
   }, [dispatch]);
 
-  const loginHandler = async (user: Login) => {
-    const { email, password } = user;
+  const loginHandler = async (login: Login) => {
 
     setIsAuthenticating(true)
     try {
-      await dispatch(loginAsync({ email, password }))
+      await dispatch(loginAsync(login))
     } catch (error) {
       Alert.alert(STRINGS.authenticationFailed, STRINGS.pleaseCheckYourCredentials);
     }
